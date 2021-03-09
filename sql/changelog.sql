@@ -25,7 +25,7 @@ create table cars (
 )
 
 --changeset Sanjeet:3
-create table houses (
+create table house (
     id int primary key,
     address varchar(50) not null
 )
