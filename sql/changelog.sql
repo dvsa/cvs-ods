@@ -23,3 +23,10 @@ create table cars (
     id int primary key,
     model varchar(50) not null
 )
+
+--changeset Sanjeet:3
+create table houses (
+    id int primary key,
+    address varchar(50) not null
+)
+
