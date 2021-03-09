@@ -30,7 +30,7 @@ create table house (
     address varchar(50) not null
 )
 
---changeset Sanjeet:3
+--changeset Sanjeet:4
 create table test (
     id int primary key,
     address varchar(50) not null
