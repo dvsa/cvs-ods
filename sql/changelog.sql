@@ -17,3 +17,9 @@ create table people (
     address2 varchar(50),
     city varchar(30)
 )
+
+--changeset Martin.Kemp:3
+create table cars (
+    id int primary key,
+    model varchar(50) not null
+)
