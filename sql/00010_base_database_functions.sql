@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset chris.peska:create-multiple-functions:1 splitStatements:true dbms:mysql endDelimiter:\nGO context:dev
+--changeset liquibase:create-multiple-functions:1 splitStatements:true dbms:mysql endDelimiter:\nGO context:dev
 
 
 CREATE FUNCTION `f_upsert_additional_notes_guidance` ( in_guidanceNotes VARCHAR(25) )
