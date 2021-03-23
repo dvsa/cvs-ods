@@ -302,3 +302,19 @@ BEGIN
     RETURN fp_id;
 END
 GO
+CREATE FUNCTION `f_upsert_contact_details` ( in_name VARCHAR(150), in_address1 VARCHAR(60), in_address2 VARCHAR(60), in_postTown VARCHAR(60), in_address3 VARCHAR(60), in_postCode VARCHAR(12), in_emailAddress VARCHAR(255), in_telephoneNumber VARCHAR(25), in_faxNumber VARCHAR(25) )
+    RETURNS INT DETERMINISTIC
+BEGIN
+    DECLARE fp_id INT UNSIGNED;
+    SELECT id
+    INTO fp_id
+    FROM contact_details
+    WHERE fingerprint = md5(CONCAT_WS('|', in_name, in_address1, in_address2, in_postTown, in_address3, in_postCode, in_emailAddress, in_telephoneNumber, in_faxNumber));
+    IF fp_id IS NULL THEN
+        INSERT INTO contact_details ( name, address1, address2, postTown, address3, postCode, emailAddress, telephoneNumber, faxNumber, fingerprint)
+        VALUES ( in_name, in_address1, in_address2, in_postTown, in_address3, in_postCode, in_emailAddress, in_telephoneNumber, in_faxNumber, md5(CONCAT_WS('|',  in_name, in_address1, in_address2, in_postTown, in_address3, in_postCode, in_emailAddress, in_telephoneNumber, in_faxNumber)));
+        SELECT LAST_INSERT_ID() INTO fp_id;
+    END IF;
+    RETURN fp_id;
+END
+GO
