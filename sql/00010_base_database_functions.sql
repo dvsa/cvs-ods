@@ -241,7 +241,7 @@ BEGIN
     RETURN fp_id;
 END
 GO
-CREATE FUNCTION `f_upsert_tire`(in_tyreSize VARCHAR(12), in_plyRating VARCHAR(2), in_fitmentCode VARCHAR(6),
+CREATE FUNCTION `f_upsert_tyre`(in_tyreSize VARCHAR(12), in_plyRating VARCHAR(2), in_fitmentCode VARCHAR(6),
                                 in_dataTrAxles VARCHAR(45), in_speedCategorySymbol VARCHAR(2),
                                 in_tyreCode INT(10) UNSIGNED)
     RETURNS INT DETERMINISTIC
@@ -249,12 +249,12 @@ BEGIN
     DECLARE fp_id INT UNSIGNED;
     SELECT id
     INTO fp_id
-    FROM tire
+    FROM tyre
     WHERE fingerprint = md5(
             CONCAT_WS('|', in_tyreSize, in_plyRating, in_fitmentCode, in_dataTrAxles, in_speedCategorySymbol,
                       in_tyreCode));
     IF fp_id IS NULL THEN
-        INSERT INTO tire (tyreSize, plyRating, fitmentCode, dataTrAxles, speedCategorySymbol, tyreCode, fingerprint)
+        INSERT INTO tyre (tyreSize, plyRating, fitmentCode, dataTrAxles, speedCategorySymbol, tyreCode, fingerprint)
         VALUES (in_tyreSize, in_plyRating, in_fitmentCode, in_dataTrAxles, in_speedCategorySymbol, in_tyreCode, md5(
                 CONCAT_WS('|', in_tyreSize, in_plyRating, in_fitmentCode, in_dataTrAxles, in_speedCategorySymbol,
                           in_tyreCode)));
