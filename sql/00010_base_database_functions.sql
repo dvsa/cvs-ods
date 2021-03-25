@@ -138,7 +138,7 @@ GO
 CREATE FUNCTION `f_upsert_make_model`(in_make VARCHAR(30), in_model VARCHAR(30), in_chassisMake VARCHAR(20),
                                       in_chassisModel VARCHAR(20), in_bodyMake VARCHAR(20), in_bodyModel VARCHAR(20),
                                       in_modelLiteral VARCHAR(30), in_bodyTypeCode CHAR(1),
-                                      in_bodyTypeDescription VARCHAR(17), in_fuelPropulsionSystem VARCHAR(12))
+                                      in_bodyTypeDescription VARCHAR(17), in_fuelPropulsionSystem VARCHAR(12), in_dtpCode VARCHAR(6))
     RETURNS INT DETERMINISTIC
 BEGIN
     DECLARE fp_id INT UNSIGNED;
@@ -147,14 +147,14 @@ BEGIN
     FROM make_model
     WHERE fingerprint = md5(
             CONCAT_WS('|', in_make, in_model, in_chassisMake, in_chassisModel, in_bodyMake, in_bodyModel,
-                      in_modelLiteral, in_bodyTypeCode, in_bodyTypeDescription, in_fuelPropulsionSystem));
+                      in_modelLiteral, in_bodyTypeCode, in_bodyTypeDescription, in_fuelPropulsionSystem, in_dtpCode));
     IF fp_id IS NULL THEN
         INSERT INTO make_model (make, model, chassisMake, chassisModel, bodyMake, bodyModel, modelLiteral, bodyTypeCode,
-                                bodyTypeDescription, fuelPropulsionSystem, fingerprint)
+                                bodyTypeDescription, fuelPropulsionSystem, dtpCode, fingerprint)
         VALUES (in_make, in_model, in_chassisMake, in_chassisModel, in_bodyMake, in_bodyModel, in_modelLiteral,
-                in_bodyTypeCode, in_bodyTypeDescription, in_fuelPropulsionSystem, md5(
+                in_bodyTypeCode, in_bodyTypeDescription, in_fuelPropulsionSystem, in_dtpCode, md5(
                         CONCAT_WS('|', in_make, in_model, in_chassisMake, in_chassisModel, in_bodyMake, in_bodyModel,
-                                  in_modelLiteral, in_bodyTypeCode, in_bodyTypeDescription, in_fuelPropulsionSystem)));
+                                  in_modelLiteral, in_bodyTypeCode, in_bodyTypeDescription, in_fuelPropulsionSystem, in_dtpCode)));
         SELECT LAST_INSERT_ID() INTO fp_id;
     END IF;
     RETURN fp_id;
