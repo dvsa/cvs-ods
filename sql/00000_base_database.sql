@@ -278,11 +278,6 @@ CREATE TABLE IF NOT EXISTS `psv_brakes`
     `serviceBrakeForceB`   MEDIUMINT UNSIGNED,
     `secondaryBrakeForceB` MEDIUMINT UNSIGNED,
     `parkingBrakeForceB`   MEDIUMINT UNSIGNED,
-    `fingerprint` VARCHAR(32) GENERATED ALWAYS AS (md5(
-            concat_ws('|', technical_record_id, brakeCodeOriginal, brakeCode, dataTrBrakeOne, dataTrBrakeTwo,
-                      dataTrBrakeThree, retarderBrakeOne, retarderBrakeTwo, serviceBrakeForceA, secondaryBrakeForceA,
-                      parkingBrakeForceA, serviceBrakeForceB, secondaryBrakeForceB,
-                      parkingBrakeForceB))) STORED UNIQUE KEY NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`technical_record_id`)
         REFERENCES `technical_record` (`id`)
@@ -300,7 +295,6 @@ CREATE TABLE IF NOT EXISTS `axle_spacing`
     `technical_record_id` BIGINT UNSIGNED NOT NULL,
     `axles`               VARCHAR(5),
     `value`               MEDIUMINT UNSIGNED,
-    `fingerprint` VARCHAR(32) GENERATED ALWAYS AS (md5(concat_ws('|', technical_record_id, axles, value))) STORED UNIQUE KEY NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`technical_record_id`)
         REFERENCES `technical_record` (`id`)
@@ -319,9 +313,6 @@ CREATE TABLE IF NOT EXISTS `microfilm`
     `microfilmDocumentType` VARCHAR(31),
     `microfilmRollNumber`   VARCHAR(5),
     `microfilmSerialNumber` VARCHAR(4),
-    `fingerprint` VARCHAR(32) GENERATED ALWAYS AS (md5(
-            concat_ws('|', technical_record_id, microfilmDocumentType, microfilmRollNumber,
-                      microfilmSerialNumber))) STORED UNIQUE KEY NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`technical_record_id`)
         REFERENCES `technical_record` (`id`)
@@ -341,9 +332,6 @@ CREATE TABLE IF NOT EXISTS `plate`
     `plateIssueDate`      DATE,
     `plateReasonForIssue` VARCHAR(16),
     `plateIssuer`         VARCHAR(150),
-    `fingerprint` VARCHAR(32) GENERATED ALWAYS AS (md5(
-            concat_ws('|', technical_record_id, plateSerialNumber, plateIssueDate, plateReasonForIssue,
-                      plateIssuer))) STORED UNIQUE KEY NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`technical_record_id`)
         REFERENCES `technical_record` (`id`)
