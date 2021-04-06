@@ -631,9 +631,6 @@ CREATE TABLE IF NOT EXISTS `test_defect`
     `notes`             VARCHAR(500),
     `prs`               TINYINT(1),
     `prohibitionIssued` TINYINT(1),
-    `fingerprint` VARCHAR(32) GENERATED ALWAYS AS (md5(
-            concat_ws('|', test_result_id, defect_id, location_id, notes, prs,
-                      prohibitionIssued))) STORED UNIQUE KEY NOT NULL,
     PRIMARY KEY (`id`),
 
     FOREIGN KEY (`test_result_id`)
