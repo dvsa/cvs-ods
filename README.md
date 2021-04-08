@@ -59,7 +59,7 @@ Test Result
 - `test_station (fg)`
 - `test_type (fg)`
 
-2.2. Subsets
+  2.2. Subsets
 
 - `vehicle`
 
