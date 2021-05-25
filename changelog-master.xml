@@ -6,4 +6,5 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <include  file="sql/00000_base_database.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00001_base_database_adr.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00010_extend_axle_spacing_axles_column.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
