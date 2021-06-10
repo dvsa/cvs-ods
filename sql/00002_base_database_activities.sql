@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `wait_reason`
 (
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `activity_id` BIGINT UNSIGNED NOT NULL,
-    `note`        VARCHAR(45),
+    `reason`      VARCHAR(19),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`activity_id`)
         REFERENCES `activity` (`id`)
