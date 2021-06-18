@@ -9,15 +9,15 @@ SET @OLD_SQL_MODE = @@SQL_MODE, SQL_MODE =
 
 CREATE TABLE IF NOT EXISTS `activity`
 (
-    `id`                 BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `test_station_id`    BIGINT UNSIGNED NOT NULL,
-    `tester_id`          BIGINT UNSIGNED NOT NULL,
-    `activityId`         VARCHAR(36),
-    `parentId`           VARCHAR(36),
-    `activityType`       VARCHAR(18),
-    `startTime`          DATETIME,
-    `endTime`            DATETIME,
-    `notes`              VARCHAR(500),
+    `id`              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `test_station_id` BIGINT UNSIGNED NOT NULL,
+    `tester_id`       BIGINT UNSIGNED NOT NULL,
+    `activityId`      VARCHAR(36),
+    `parentId`        VARCHAR(36),
+    `activityType`    VARCHAR(18),
+    `startTime`       DATETIME,
+    `endTime`         DATETIME,
+    `notes`           VARCHAR(500),
     PRIMARY KEY (`id`),
 
     FOREIGN KEY (`test_station_id`)
