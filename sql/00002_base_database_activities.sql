@@ -31,7 +31,9 @@ CREATE TABLE IF NOT EXISTS `activity`
         ON UPDATE NO ACTION,
 
     INDEX `idx_test_station_id` (`test_station_id` ASC),
-    INDEX `idx_tester_id` (`tester_id` ASC)
+    INDEX `idx_tester_id` (`tester_id` ASC),
+    INDEX `idx_activityId` (`activityId` ASC),
+    INDEX `idx_parentId` (`parentId` ASC)
 )
     ENGINE = InnoDB;
 
