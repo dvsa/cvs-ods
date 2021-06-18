@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS `activity`
     `parentId`           VARCHAR(36),
     `activityType`       VARCHAR(18),
     `startTime`          DATETIME,
-    `activityDay`        DATE,
     `endTime`            DATETIME,
     `notes`              VARCHAR(500),
     PRIMARY KEY (`id`),
