@@ -38,7 +38,7 @@ Quick step to instantiate database in Docker:
 
 Tables
 
-2.1. Common for Technical Record And Test Result
+2.1. Common for Technical Record, Test Result and Activities
 
 * `vehicle_class (fg)`
 * `vehicle_subclass (fg)`
@@ -78,6 +78,11 @@ Test Result
 *  `defect (fg)`
 *  `test_defect`
 *  `test_result`
+
+Activities
+
+*  `activity`
+*  `wait_reason`
 
 *(fg) - tables with `fingerprint` virtual column
 
