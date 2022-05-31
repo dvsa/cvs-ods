@@ -1,5 +1,5 @@
 CREATE VIEW evl_view AS 
-    SELECT MAX(testExpiryDate), vrm_trm, certificateNumber, vehicle_class_id
+    SELECT MAX(testExpiryDate) as testExpiryDate, vrm_trm, certificateNumber, vehicle_class_id
     FROM test_result t
     LEFT JOIN (SELECT MAX(createdAt), id, vrm_trm 
         FROM vehicle 
