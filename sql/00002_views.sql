@@ -1,15 +1,17 @@
 CREATE VIEW evl_view AS 
-    SELECT MAX(testExpiryDate) as testExpiryDate, vrm_trm, certificateNumber, vehicle_class_id
+    SELECT MAX(testExpiryDate) AS testExpiryDate, vrm_trm, certificateNumber
     FROM test_result t
     LEFT JOIN (SELECT MAX(createdAt), id, vrm_trm 
         FROM vehicle 
-        GROUP BY createdAt, id
-    ) SubQ
-    ON SubQ.id=t.vehicle_id
+        WHERE
+            LENGTH(vrm_trm) < 8 AND 
+            vrm_trm NOT REGEXP '^[0-9]{6}[zZ]$'
+            GROUP BY id, vrm_trm
+    ) SubQ ON SubQ.id=t.vehicle_id
     WHERE 
-        t.testExpiryDate != '0001-01-01' and 
-        length(SubQ.vrm_trm) != 8 and 
-        UPPER(LEFT(SubQ.vrm_trm,7)) != 'Z' and 
-        (t.certificateNumber != '' or NOT LOCATE(' ', t.certificateNumber) > 0) and 
+        t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY) AND 
+        (t.certificateNumber IS NOT NULL AND 
+        .certificateNumber != '' AND 
+        NOT LOCATE(' ', t.certificateNumber) > 0) AND
         SubQ.vrm_trm NOT REGEXP '^[a-zA-Z][0-9]{6}$'
-    GROUP BY t.testExpiryDate, SubQ.vrm_trm;
+    GROUP BY vrm_trm, certificateNumber;
