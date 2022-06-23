@@ -8,4 +8,5 @@
     <include  file="sql/00001_base_database_adr.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00010_extend_axle_spacing_axles_column.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00011_extend_technical_record_approvalType_column.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
