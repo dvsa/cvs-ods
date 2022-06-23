@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset liquibase:create -multiple-tables:1 splitStatements:true endDelimiter:; context:dev
+--changeset liquibase:3 -multiple-tables:1 splitStatements:true endDelimiter:; context:dev
 CREATE OR REPLACE VIEW evl_view AS
 SELECT MAX(testExpiryDate) AS testExpiryDate,
     SubQ.vrm_trm,
