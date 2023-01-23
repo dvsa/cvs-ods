@@ -1,4 +1,4 @@
---liquibase formatted sqlW01B4174
+--liquibase formatted sql
 --changeset liquibase:3 -multiple-tables:1 splitStatements:true endDelimiter:; context:dev
 -- Refactor to use ROW_NUMBER() OVER(PARTITION ...) ONCE MIGRATED TO MYSQL 8.0+
 CREATE OR REPLACE VIEW evl_view AS 
