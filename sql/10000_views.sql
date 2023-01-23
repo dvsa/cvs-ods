@@ -2,11 +2,9 @@
 --changeset liquibase:3 -multiple-tables:1 splitStatements:true endDelimiter:; context:dev
 CREATE OR REPLACE VIEW evl_view AS
 SELECT testExpiryDate, vrm_trm, certificateNumber 
-FROM 
-(
+FROM (
 	SELECT testExpiryDate, vrm_trm, certificateNumber, IF(@prev <> vrm_trm, @rn:=0,@rn) as row_number_over_partition, @prev:=vrm_trm, @rn:=@rn+1 AS rn
-	FROM
-	( 
+	FROM ( 
 		SELECT MAX(testExpiryDate) AS testExpiryDate,
 			SubQ.vrm_trm,
 			t.certificateNumber,
