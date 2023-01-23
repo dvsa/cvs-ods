@@ -17,7 +17,7 @@ FROM test_result t
             AND vrm_trm NOT REGEXP '^[0-9]{6}[zZ]$'
         GROUP BY id,
             vrm_trm
-    ) SubQ ON SubQ.id = t.vehicle_id 
+    ) SubQ ON SubQ.id = t.vehicle_id
 WHERE t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY)
     AND (
         t.certificateNumber IS NOT NULL
@@ -62,4 +62,4 @@ WHERE t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY)
         GROUP BY vrm_trm, testExpiryDate
     )    
 GROUP BY SubQ.vrm_trm,
-    t.certificateNumber
+    t.certificateNumber;
