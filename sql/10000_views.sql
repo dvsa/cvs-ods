@@ -62,4 +62,4 @@ WHERE t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY)
 		GROUP BY vrm_trm, testExpiryDate
 	)	
 GROUP BY SubQ.vrm_trm,
-	t.certificateNumber
+	t.certificateNumber;
