@@ -32,7 +32,7 @@ FROM (
 		GROUP BY SubQ.vrm_trm,
 			t.certificateNumber,
 			t.testTypeEndTimeStamp
-		ORDER BY vrm_trm, testExpiryDate desc, t.testTypeEndTimeStamp desc
+		ORDER BY vrm_trm, testExpiryDate DESC, t.testTypeEndTimeStamp DESC
 	) as SubQ2
 ) as SubQ3
 WHERE row_number_over_partition = 0
