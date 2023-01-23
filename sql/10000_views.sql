@@ -4,7 +4,7 @@ CREATE OR REPLACE VIEW evl_view AS
 SELECT testExpiryDate, vrm_trm, certificateNumber 
 FROM 
 (
-	SELECT testExpiryDate, vrm_trm, certificateNumber, IF(@prev <> vrm_trm, @rn:=0,@rn) as count, @prev:=vrm_trm, @rn:=@rn+1 AS rn
+	SELECT testExpiryDate, vrm_trm, certificateNumber, IF(@prev <> vrm_trm, @rn:=0,@rn) as row_number_over_partition, @prev:=vrm_trm, @rn:=@rn+1 AS rn
 	FROM
 	( 
 		SELECT MAX(testExpiryDate) AS testExpiryDate,
@@ -36,4 +36,4 @@ FROM
 		ORDER BY vrm_trm, testExpiryDate desc, t.testTypeEndTimeStamp desc
 	) as SubQ2
 ) as SubQ3
-WHERE count = 0
+WHERE row_number_over_partition = 0
