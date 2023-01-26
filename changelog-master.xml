@@ -8,5 +8,8 @@
     <include  file="sql/00001_base_database_adr.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00010_extend_axle_spacing_axles_column.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00011_extend_technical_record_approvalType_column.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00012_test_result_add_testResultId_column.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00013_test_result_add_testtype_fingerprint.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00014_test_result_recreate_unique_constraint.sql" relativeToChangelogFile="true"/>
     <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
