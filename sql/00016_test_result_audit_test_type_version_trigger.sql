@@ -1,9 +1,11 @@
 --liquibase formatted sql
 --changeset liquibase:create -multiple-tables:1 splitStatements:true endDelimiter:// context:dev
-CREATE TRIGGER check_tt_version BEFORE UPDATE ON `testtype_version`
+CREATE TRIGGER check_tt_version AFTER UPDATE ON `test_result`
        FOR EACH ROW
        BEGIN
-        IF OLD.`testCode` <> NEW.`testCode` OR
+        IF 
+            OLD.`test_type_id` <> NEW.`test_type_id` OR
+            OLD.`testCode` <> NEW.`testCode` OR
             OLD.`certificateNumber` <> NEW.`certificateNumber` OR
             OLD.`secondaryCertificateNumber` <> NEW.`secondaryCertificateNumber` OR
             OLD.`testExpiryDate` <> NEW.`testExpiryDate` OR
@@ -21,24 +23,23 @@ CREATE TRIGGER check_tt_version BEFORE UPDATE ON `testtype_version`
             OLD.`modificationTypeUsed` <> NEW.`modificationTypeUsed` OR
             OLD.`smokeTestKLimitApplied` <> NEW.`smokeTestKLimitApplied`
         THEN
-            SET new.testType_version = old.testType_version + 1;
             INSERT INTO `testtype_version`
-                (`test_result_id`, `testCode`, `testNumber`, `certificateNumber`, 
+                (`test_result_id`, `test_type_id`, `testCode`, `testNumber`, `certificateNumber`, 
                 `secondaryCertificateNumber`, `testExpiryDate`, `testAnniversaryDate`, 
                 `testTypeStartTimestamp`, `testTypeEndTimestamp`, `numberOfSeatbeltsFitted`, 
                 `lastSeatbeltInstallationCheckDate`, `seatbeltInstallationCheckDate`, 
                 `testResult`, `reasonForAbandoning`, `additionalNotesRecorded`, 
                 `additionalCommentsForAbandon`, `particulateTrapFitted`, 
                 `particulateTrapSerialNumber`, `modificationTypeUsed`, 
-                `smokeTestKLimitApplied`, `testType_version`)
+                `smokeTestKLimitApplied`)
             VALUES
-                ( OLD.id, OLD.`testCode`, OLD.`testNumber`, OLD.`certificateNumber`, 
+                ( OLD.`id`, OLD.`test_type_id`, OLD.`testCode`, OLD.`testNumber`, OLD.`certificateNumber`, 
                 OLD.`secondaryCertificateNumber`, OLD.`testExpiryDate`, OLD.`testAnniversaryDate`, 
                 OLD.`testTypeStartTimestamp`, OLD.`testTypeEndTimestamp`, OLD.`numberOfSeatbeltsFitted`, 
                 OLD.`lastSeatbeltInstallationCheckDate`, OLD.`seatbeltInstallationCheckDate`, 
                 OLD.`testResult`, OLD.`reasonForAbandoning`, OLD.`additionalNotesRecorded`, 
                 OLD.`additionalCommentsForAbandon`, OLD.`particulateTrapFitted`, 
                 OLD.`particulateTrapSerialNumber`, OLD.`modificationTypeUsed`, 
-                OLD.`smokeTestKLimitApplied`, OLD.`testType_version`);
-            END IF;
+                OLD.`smokeTestKLimitApplied`);
+        END IF;
 END;

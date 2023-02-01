@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `testtype_version`
 (
     `id`                                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `test_result_id`                    BIGINT,
+    `test_type_id`                      BIGINT,
     `testCode`                          VARCHAR(3),
     `testNumber`                        VARCHAR(45),
     `certificateNumber`                 VARCHAR(9),
@@ -23,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `testtype_version`
     `particulateTrapSerialNumber`       VARCHAR(100),
     `modificationTypeUsed`              VARCHAR(100),
     `smokeTestKLimitApplied`            VARCHAR(100),
-    `testType_version`                  BIGINT DEFAULT 0,
+    `testType_insert_ts`                DATETIME DEFAULT NOW(),
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB;
