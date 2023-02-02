@@ -25,5 +25,5 @@ WHERE t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY)
     )
     AND tt.testTypeClassification = 'Annual With Certificate'
 GROUP BY SubQ.vrm_trm,
-    t.certificateNumber;
-ORDER BY vrm_trm, testExpiryDate desc, t.testTypeEndTimeStamp desc
+    t.certificateNumber
+ORDER BY vrm_trm, testExpiryDate desc, t.testTypeEndTimeStamp desc;
