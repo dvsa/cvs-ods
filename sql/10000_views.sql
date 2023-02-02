@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset liquibase:3 -multiple-tables:1 splitStatements:true endDelimiter:; context:dev
+--changeset liquibase:3 -multiple-tables:1 splitStatements:true endDelimiter:; context:dev runOnChange:true
 CREATE OR REPLACE VIEW evl_view AS
 SELECT MAX(testExpiryDate) AS testExpiryDate,
     SubQ.vrm_trm,
@@ -26,3 +26,4 @@ WHERE t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY)
     AND tt.testTypeClassification = 'Annual With Certificate'
 GROUP BY SubQ.vrm_trm,
     t.certificateNumber;
+ORDER BY vrm_trm, testExpiryDate desc, t.testTypeEndTimeStamp desc
