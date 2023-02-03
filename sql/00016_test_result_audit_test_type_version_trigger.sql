@@ -22,9 +22,14 @@ CREATE TRIGGER check_tt_version AFTER UPDATE ON `test_result`
             OLD.`particulateTrapSerialNumber` <> NEW.`particulateTrapSerialNumber` OR
             OLD.`modificationTypeUsed` <> NEW.`modificationTypeUsed` OR
             OLD.`smokeTestKLimitApplied` <> NEW.`smokeTestKLimitApplied`
-        THEN
+        THEN   
             INSERT INTO `testtype_version`
-                (`test_result_id`, `test_type_id`, `testCode`, `testNumber`, `certificateNumber`, 
+                (`test_result_id`, `vehicle_id`, `fuel_emission_id`, `test_station_id`, 
+                `tester_id`, `preparer_id`, `vehicle_class_id`, `test_type_id`, `testStatus`, 
+                `reasonForCancellation`, `numberOfSeats`, `odometerReading`, 
+                `odometerReadingUnits`, `countryOfRegistration`, `noOfAxles`, 
+                `regnDate`, `firstUseDate`, `createdAt`, `lastUpdatedAt`,
+                `testCode`, `testNumber`, `certificateNumber`, 
                 `secondaryCertificateNumber`, `testExpiryDate`, `testAnniversaryDate`, 
                 `testTypeStartTimestamp`, `testTypeEndTimestamp`, `numberOfSeatbeltsFitted`, 
                 `lastSeatbeltInstallationCheckDate`, `seatbeltInstallationCheckDate`, 
@@ -33,7 +38,13 @@ CREATE TRIGGER check_tt_version AFTER UPDATE ON `test_result`
                 `particulateTrapSerialNumber`, `modificationTypeUsed`, 
                 `smokeTestKLimitApplied`)
             VALUES
-                ( OLD.`id`, OLD.`test_type_id`, OLD.`testCode`, OLD.`testNumber`, OLD.`certificateNumber`, 
+                ( OLD.`id`, OLD.`vehicle_id`, OLD.`fuel_emission_id`,
+                OLD.`test_station_id`, OLD.`tester_id`, OLD.`preparer_id`, OLD.`vehicle_class_id`,
+                OLD.`test_type_id`, OLD.`testStatus`, OLD.`reasonForCancellation`,
+                OLD.`numberOfSeats`, OLD.`odometerReading`, 
+                OLD.`odometerReadingUnits`, OLD.`countryOfRegistration`, OLD.`noOfAxles`, 
+                OLD.`regnDate`, OLD.`firstUseDate`, OLD.`createdAt`, OLD.`lastUpdatedAt`,
+                OLD.`testCode`, OLD.`testNumber`, OLD.`certificateNumber`, 
                 OLD.`secondaryCertificateNumber`, OLD.`testExpiryDate`, OLD.`testAnniversaryDate`, 
                 OLD.`testTypeStartTimestamp`, OLD.`testTypeEndTimestamp`, OLD.`numberOfSeatbeltsFitted`, 
                 OLD.`lastSeatbeltInstallationCheckDate`, OLD.`seatbeltInstallationCheckDate`, 

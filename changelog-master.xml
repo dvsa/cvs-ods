@@ -13,5 +13,7 @@
     <include  file="sql/00014_test_result_recreate_unique_constraint.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00015_add_testtype_version_table.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00016_test_result_audit_test_type_version_trigger.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00017_extend_datetime_columns.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00018_extend_test_result_testCode.sql" relativeToChangelogFile="true"/>
     <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
