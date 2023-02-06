@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `technical_record`
     `ntaNumber`                        VARCHAR(40),
     `coifSerialNumber`                 VARCHAR(8),
     `coifCertifierName`                VARCHAR(20),
-    `approvalType`                     VARCHAR(3),
+    `approvalType`                     VARCHAR(6),
     `approvalTypeNumber`               VARCHAR(25),
     `variantNumber`                    VARCHAR(25),
     `conversionRefNo`                  VARCHAR(10),
