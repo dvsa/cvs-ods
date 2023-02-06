@@ -6,15 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <include  file="sql/00000_base_database.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00001_base_database_adr.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00010_extend_axle_spacing_axles_column.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00011_extend_technical_record_approvalType_column.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00012_test_result_add_testResultId_column.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00013_test_result_add_testtype_fingerprint.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00014_test_result_recreate_unique_constraint.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00015_add_testtype_version_table.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00002_test_result_audit_test_type_version_trigger.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00017_extend_datetime_columns.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00018_extend_test_result_testCode.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00019_test_result_drop_version_trigger.sql" relativeToChangelogFile="true"/>
-    <include  file="sql/00020_test_result_audit_test_type_version_trigger.sql" relativeToChangelogFile="true"/>
     <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
