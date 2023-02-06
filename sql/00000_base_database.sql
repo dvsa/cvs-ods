@@ -470,6 +470,7 @@ CREATE TABLE IF NOT EXISTS test_result
     `preparer_id`                       BIGINT UNSIGNED NOT NULL,
     `vehicle_class_id`                  BIGINT UNSIGNED NOT NULL,
     `test_type_id`                      BIGINT UNSIGNED NOT NULL,
+    `testResultId`                      VARCHAR(44) NOT NULL,
     `testStatus`                        VARCHAR(9),
     `reasonForCancellation`             VARCHAR(500),
     `numberOfSeats`                     INT,
@@ -481,7 +482,7 @@ CREATE TABLE IF NOT EXISTS test_result
     `firstUseDate`                      DATE,
     `createdAt`                         DATETIME,
     `lastUpdatedAt`                     DATETIME,
-    `testCode`                          VARCHAR(3),
+    `testCode`                          VARCHAR(4),
     `testNumber`                        VARCHAR(45),
     `certificateNumber`                 VARCHAR(9),
     `secondaryCertificateNumber`        VARCHAR(9),
@@ -502,6 +503,8 @@ CREATE TABLE IF NOT EXISTS test_result
     `smokeTestKLimitApplied`            VARCHAR(100),
     `createdBy_Id`                      BIGINT UNSIGNED NOT NULL,
     `lastUpdatedBy_Id`                  BIGINT UNSIGNED NOT NULL,
+    `testtype_fingerprint`              VARCHAR(32) GENERATED ALWAYS AS (MD5(
+                                        CONCAT_WS('|', IFNULL(`testNumber`, ''), IFNULL(`testTypeEndTimestamp`, '')))) STORED NOT NULL,
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`vehicle_id`)
@@ -549,7 +552,7 @@ CREATE TABLE IF NOT EXISTS test_result
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
-    UNIQUE INDEX `idx_comp_test_result_uq` (`vehicle_id` ASC,`test_type_id` ASC, `createdAt` ASC),
+    UNIQUE INDEX `idx_comp_test_result_uq` (`vehicle_id`, `testResultId`, `testtype_fingerprint`),
 
     INDEX `idx_vehicle_id` (`vehicle_id` ASC),
     INDEX `idx_test_number_id` (`testNumber` ASC),
