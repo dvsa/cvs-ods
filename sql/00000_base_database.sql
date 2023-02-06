@@ -701,7 +701,11 @@ CREATE TABLE IF NOT EXISTS `testtype_version`
     `modificationTypeUsed`              VARCHAR(100),
     `smokeTestKLimitApplied`            VARCHAR(100),
     `testType_insert_ts`                DATETIME DEFAULT NOW(),
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    
+    INDEX `idx_testtype_test_result_id` (`test_result_id` ASC),
+    INDEX `idx_testtype_vehicle_id` (`vehicle_id` ASC)
+
 )
     ENGINE = InnoDB;
 
