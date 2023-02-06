@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `axle_spacing`
 (
     `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `technical_record_id` BIGINT UNSIGNED NOT NULL,
-    `axles`               VARCHAR(5),
+    `axles`               VARCHAR(25),
     `value`               MEDIUMINT UNSIGNED,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`technical_record_id`)
