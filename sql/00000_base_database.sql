@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `vehicle`
     `vin`           VARCHAR(21),
     `vrm_trm`       VARCHAR(9),
     `trailer_id`    VARCHAR(8),
-    `createdAt`     DATETIME,
+    `createdAt`     DATETIME(6),
     PRIMARY KEY (`id`),
     UNIQUE INDEX `idx_system_number_vin_uq` (`system_number` ASC, `vin` ASC),
     INDEX `idx_vehicle_vin` (`vin` ASC),
@@ -124,8 +124,8 @@ CREATE TABLE IF NOT EXISTS `technical_record`
     `id`                               BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `vehicle_id`                       BIGINT UNSIGNED NOT NULL,
     `recordCompleteness`               VARCHAR(8),
-    `createdAt`                        DATETIME,
-    `lastUpdatedAt`                    DATETIME,
+    `createdAt`                        DATETIME(6),
+    `lastUpdatedAt`                    DATETIME(6),
     `make_model_id`                    BIGINT UNSIGNED NOT NULL,
     `functionCode`                     CHAR(1),
     `offRoad`                          TINYINT(1),
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `technical_record`
     `ntaNumber`                        VARCHAR(40),
     `coifSerialNumber`                 VARCHAR(8),
     `coifCertifierName`                VARCHAR(20),
-    `approvalType`                     VARCHAR(3),
+    `approvalType`                     VARCHAR(6),
     `approvalTypeNumber`               VARCHAR(25),
     `variantNumber`                    VARCHAR(25),
     `conversionRefNo`                  VARCHAR(10),
@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `axle_spacing`
 (
     `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `technical_record_id` BIGINT UNSIGNED NOT NULL,
-    `axles`               VARCHAR(5),
+    `axles`               VARCHAR(25),
     `value`               MEDIUMINT UNSIGNED,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`technical_record_id`)
@@ -470,6 +470,7 @@ CREATE TABLE IF NOT EXISTS test_result
     `preparer_id`                       BIGINT UNSIGNED NOT NULL,
     `vehicle_class_id`                  BIGINT UNSIGNED NOT NULL,
     `test_type_id`                      BIGINT UNSIGNED NOT NULL,
+    `testResultId`                      VARCHAR(44) NOT NULL,
     `testStatus`                        VARCHAR(9),
     `reasonForCancellation`             VARCHAR(500),
     `numberOfSeats`                     INT,
@@ -479,16 +480,16 @@ CREATE TABLE IF NOT EXISTS test_result
     `noOfAxles`                         TINYINT UNSIGNED,
     `regnDate`                          DATE,
     `firstUseDate`                      DATE,
-    `createdAt`                         DATETIME,
-    `lastUpdatedAt`                     DATETIME,
-    `testCode`                          VARCHAR(3),
+    `createdAt`                         DATETIME(6),
+    `lastUpdatedAt`                     DATETIME(6),
+    `testCode`                          VARCHAR(4),
     `testNumber`                        VARCHAR(45),
     `certificateNumber`                 VARCHAR(9),
     `secondaryCertificateNumber`        VARCHAR(9),
     `testExpiryDate`                    DATE,
     `testAnniversaryDate`               DATE,
-    `testTypeStartTimestamp`            DATETIME,
-    `testTypeEndTimestamp`              DATETIME,
+    `testTypeStartTimestamp`            DATETIME(6),
+    `testTypeEndTimestamp`              DATETIME(6),
     `numberOfSeatbeltsFitted`           TINYINT UNSIGNED,
     `lastSeatbeltInstallationCheckDate` DATE,
     `seatbeltInstallationCheckDate`     TINYINT(1),
@@ -502,6 +503,8 @@ CREATE TABLE IF NOT EXISTS test_result
     `smokeTestKLimitApplied`            VARCHAR(100),
     `createdBy_Id`                      BIGINT UNSIGNED NOT NULL,
     `lastUpdatedBy_Id`                  BIGINT UNSIGNED NOT NULL,
+    `testtype_fingerprint`              VARCHAR(32) GENERATED ALWAYS AS (MD5(
+                                        CONCAT_WS('|', IFNULL(`testNumber`, ''), IFNULL(`testTypeEndTimestamp`, '')))) STORED NOT NULL,
 
     PRIMARY KEY (`id`),
     FOREIGN KEY (`vehicle_id`)
@@ -549,7 +552,7 @@ CREATE TABLE IF NOT EXISTS test_result
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
 
-    UNIQUE INDEX `idx_comp_test_result_uq` (`vehicle_id` ASC,`test_type_id` ASC, `createdAt` ASC),
+    UNIQUE INDEX `idx_comp_test_result_uq` (`vehicle_id`, `testResultId`, `testtype_fingerprint`),
 
     INDEX `idx_vehicle_id` (`vehicle_id` ASC),
     INDEX `idx_test_number_id` (`testNumber` ASC),
@@ -655,6 +658,56 @@ CREATE TABLE IF NOT EXISTS `test_defect`
 )
     ENGINE = InnoDB;
 
+
+CREATE TABLE IF NOT EXISTS `testtype_version`
+(
+    `id`                                BIGINT AUTO_INCREMENT,
+    `test_result_id`                    BIGINT,
+    `vehicle_id`                        BIGINT,
+    `fuel_emission_id`                  BIGINT,
+    `test_station_id`                   BIGINT,
+    `tester_id`                         BIGINT,
+    `preparer_id`                       BIGINT,
+    `vehicle_class_id`                  BIGINT,
+    `test_type_id`                      BIGINT,
+    `testStatus`                        VARCHAR(9),
+    `reasonForCancellation`             VARCHAR(500),
+    `numberOfSeats`                     INT(11),
+    `odometerReading`                   INT(10),
+    `odometerReadingUnits`              VARCHAR(10),
+    `countryOfRegistration`             VARCHAR(56),
+    `noOfAxles`                         TINYINT(3),
+    `regnDate`                          DATE DEFAULT NULL,
+    `firstUseDate`                      DATE DEFAULT NULL,
+    `createdAt`                         DATETIME(6) DEFAULT NULL,
+    `lastUpdatedAt`                     DATETIME(6) DEFAULT NULL,
+    `testCode`                          VARCHAR(4),
+    `testNumber`                        VARCHAR(45),
+    `certificateNumber`                 VARCHAR(9),
+    `secondaryCertificateNumber`        VARCHAR(9),
+    `testExpiryDate`                    DATE,
+    `testAnniversaryDate`               DATE,
+    `testTypeStartTimestamp`            DATETIME,
+    `testTypeEndTimestamp`              DATETIME,
+    `numberOfSeatbeltsFitted`           TINYINT UNSIGNED,
+    `lastSeatbeltInstallationCheckDate` DATE,
+    `seatbeltInstallationCheckDate`     TINYINT(1),
+    `testResult`                        VARCHAR(9),
+    `reasonForAbandoning`               VARCHAR(45),
+    `additionalNotesRecorded`           VARCHAR(500),
+    `additionalCommentsForAbandon`      VARCHAR(500),
+    `particulateTrapFitted`             VARCHAR(100),
+    `particulateTrapSerialNumber`       VARCHAR(100),
+    `modificationTypeUsed`              VARCHAR(100),
+    `smokeTestKLimitApplied`            VARCHAR(100),
+    `testType_insert_ts`                DATETIME DEFAULT NOW(),
+    PRIMARY KEY (`id`),
+    
+    INDEX `idx_testtype_test_result_id` (`test_result_id` ASC),
+    INDEX `idx_testtype_vehicle_id` (`vehicle_id` ASC)
+
+)
+    ENGINE = InnoDB;
 
 SET SQL_MODE = @OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
