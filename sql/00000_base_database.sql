@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `technical_record`
     `couplingCenterToRearTrlMin`       MEDIUMINT UNSIGNED,
     `couplingCenterToRearTrlMax`       MEDIUMINT UNSIGNED,
     `centreOfRearmostAxleToRearOfTrl`  MEDIUMINT UNSIGNED,
-    `notes`                            VARCHAR(800),
+    `notes`                            VARCHAR(810),
     `purchaserNotes`                   VARCHAR(1024),
     `manufacturerNotes`                VARCHAR(1024),
     `noOfAxles`                        TINYINT(1),
