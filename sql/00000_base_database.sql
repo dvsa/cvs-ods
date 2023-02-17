@@ -426,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `test_station`
 CREATE TABLE IF NOT EXISTS `preparer`
 (
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `preparerId`  VARCHAR(9),
+    `preparerId`  VARCHAR(20),
     `name`        VARCHAR(60),
     `fingerprint` VARCHAR(32) GENERATED ALWAYS AS (md5(
             concat_ws('|', IFNULL(`preparerId`, ''), IFNULL(`name`, '')))) STORED UNIQUE KEY NOT NULL,
@@ -438,7 +438,7 @@ CREATE TABLE IF NOT EXISTS `preparer`
 CREATE TABLE IF NOT EXISTS `tester`
 (
     `id`            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `staffId`       VARCHAR(9),
+    `staffId`       VARCHAR(36),
     `name`          VARCHAR(60),
     `email_address` VARCHAR(254),
     `fingerprint` VARCHAR(32) GENERATED ALWAYS AS (md5(concat_ws('|', IFNULL(`staffId`, ''), IFNULL(`name`, ''),
@@ -484,8 +484,8 @@ CREATE TABLE IF NOT EXISTS test_result
     `lastUpdatedAt`                     DATETIME(6),
     `testCode`                          VARCHAR(4),
     `testNumber`                        VARCHAR(45),
-    `certificateNumber`                 VARCHAR(9),
-    `secondaryCertificateNumber`        VARCHAR(9),
+    `certificateNumber`                 VARCHAR(20),
+    `secondaryCertificateNumber`        VARCHAR(20),
     `testExpiryDate`                    DATE,
     `testAnniversaryDate`               DATE,
     `testTypeStartTimestamp`            DATETIME(6),
@@ -494,7 +494,7 @@ CREATE TABLE IF NOT EXISTS test_result
     `lastSeatbeltInstallationCheckDate` DATE,
     `seatbeltInstallationCheckDate`     TINYINT(1),
     `testResult`                        VARCHAR(9),
-    `reasonForAbandoning`               VARCHAR(45),
+    `reasonForAbandoning`               VARCHAR(420),
     `additionalNotesRecorded`           VARCHAR(500),
     `additionalCommentsForAbandon`      VARCHAR(500),
     `particulateTrapFitted`             VARCHAR(100),
@@ -589,7 +589,7 @@ CREATE TABLE IF NOT EXISTS `defect`
     `imNumber`           INT UNSIGNED,
     `imDescription`      VARCHAR(200),
     `itemNumber`         INT UNSIGNED,
-    `itemDescription`    VARCHAR(200),
+    `itemDescription`    VARCHAR(260),
     `deficiencyRef`      VARCHAR(200),
     `deficiencyId`       CHAR(1),
     `deficiencySubId`    VARCHAR(7),
