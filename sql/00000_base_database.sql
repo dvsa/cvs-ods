@@ -503,6 +503,7 @@ CREATE TABLE IF NOT EXISTS test_result
     `smokeTestKLimitApplied`            VARCHAR(100),
     `createdBy_Id`                      BIGINT UNSIGNED NOT NULL,
     `lastUpdatedBy_Id`                  BIGINT UNSIGNED NOT NULL,
+    `nopInsertedAt`                     DATETIME(3),
     `testtype_fingerprint`              VARCHAR(32) GENERATED ALWAYS AS (MD5(
                                         CONCAT_WS('|', IFNULL(`testNumber`, ''), IFNULL(`testTypeEndTimestamp`, '')))) STORED NOT NULL,
 
@@ -693,13 +694,14 @@ CREATE TABLE IF NOT EXISTS `testtype_version`
     `lastSeatbeltInstallationCheckDate` DATE,
     `seatbeltInstallationCheckDate`     TINYINT(1),
     `testResult`                        VARCHAR(9),
-    `reasonForAbandoning`               VARCHAR(45),
+    `reasonForAbandoning`               VARCHAR(420),
     `additionalNotesRecorded`           VARCHAR(500),
     `additionalCommentsForAbandon`      VARCHAR(500),
     `particulateTrapFitted`             VARCHAR(100),
     `particulateTrapSerialNumber`       VARCHAR(100),
     `modificationTypeUsed`              VARCHAR(100),
     `smokeTestKLimitApplied`            VARCHAR(100),
+    `nopInsertedAt`                     DATETIME(3),
     `testType_insert_ts`                DATETIME DEFAULT NOW(),
     PRIMARY KEY (`id`),
     
