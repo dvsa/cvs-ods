@@ -1,6 +1,6 @@
 --liquibase formatted sql
 --changeset liquibase:create -multiple-tables:1 splitStatements:true endDelimiter:// context:dev
-CREATE TRIGGER check_tt_version AFTER UPDATE ON `test_result`
+CREATE TRIGGER check_tt_version2 AFTER UPDATE ON `test_result`
        FOR EACH ROW
        BEGIN
         IF 
