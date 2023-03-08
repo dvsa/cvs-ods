@@ -36,7 +36,7 @@ CREATE TRIGGER check_tt_version2 AFTER UPDATE ON `test_result`
                 `testResult`, `reasonForAbandoning`, `additionalNotesRecorded`, 
                 `additionalCommentsForAbandon`, `particulateTrapFitted`, 
                 `particulateTrapSerialNumber`, `modificationTypeUsed`, 
-                `smokeTestKLimitApplied`, `triggerType`)
+                `smokeTestKLimitApplied`, `nopInsertedAt`, `triggerType`)
             VALUES
                 ( OLD.`id`, OLD.`vehicle_id`, OLD.`fuel_emission_id`,
                 OLD.`test_station_id`, OLD.`tester_id`, OLD.`preparer_id`, OLD.`vehicle_class_id`,
@@ -51,6 +51,6 @@ CREATE TRIGGER check_tt_version2 AFTER UPDATE ON `test_result`
                 OLD.`testResult`, OLD.`reasonForAbandoning`, OLD.`additionalNotesRecorded`, 
                 OLD.`additionalCommentsForAbandon`, OLD.`particulateTrapFitted`, 
                 OLD.`particulateTrapSerialNumber`, OLD.`modificationTypeUsed`, 
-                OLD.`smokeTestKLimitApplied`, 'UPDATE');
+                OLD.`smokeTestKLimitApplied`, OLD.`nopInsertedAt`, 'UPDATE');
         END IF;
 END;
