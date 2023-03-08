@@ -702,6 +702,7 @@ CREATE TABLE IF NOT EXISTS `testtype_version`
     `particulateTrapSerialNumber`       VARCHAR(100),
     `modificationTypeUsed`              VARCHAR(100),
     `smokeTestKLimitApplied`            VARCHAR(100),
+    `triggerType`                       VARCHAR(20),
     `testType_insert_ts`                DATETIME DEFAULT NOW(),
     PRIMARY KEY (`id`),
     
