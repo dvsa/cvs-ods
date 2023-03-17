@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset liquibase:create -multiple-tables:1 splitStatements:true endDelimiter:// context:dev
+--changeset liquibase:create -multiple-tables:1 splitStatements:true endDelimiter:; context:dev
 CREATE TABLE `auth_into_service` (
   `id`                  bigint unsigned NOT NULL AUTO_INCREMENT,
   `technical_record_id` bigint unsigned NOT NULL,

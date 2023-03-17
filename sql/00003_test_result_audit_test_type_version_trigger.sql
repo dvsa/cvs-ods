@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset liquibase:create -multiple-tables:1 splitStatements:true endDelimiter:// context:dev
+--changeset liquibase:create -multiple-tables:1 splitStatements:true endDelimiter:; context:dev
 CREATE TRIGGER check_tt_version_delete AFTER DELETE ON `test_result`
     FOR EACH ROW
     BEGIN
