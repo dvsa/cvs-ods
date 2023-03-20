@@ -21,6 +21,7 @@ WHERE t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY)
     AND (
         t.certificateNumber IS NOT NULL
         AND t.certificateNumber != ''
+        AND t.testStatus != 'cancelled'
         AND NOT LOCATE(' ', t.certificateNumber) > 0
     )
     AND tt.testTypeClassification = 'Annual With Certificate'
