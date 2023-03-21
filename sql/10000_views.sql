@@ -23,6 +23,7 @@ WHERE t.testExpiryDate > DATE(NOW() - INTERVAL 3 DAY)
         AND t.certificateNumber != ''
         AND NOT LOCATE(' ', t.certificateNumber) > 0
     )
+    AND t.testStatus != 'cancelled'
     AND tt.testTypeClassification = 'Annual With Certificate'
 GROUP BY SubQ.vrm_trm,
     t.certificateNumber
