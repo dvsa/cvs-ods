@@ -9,5 +9,7 @@
     <include  file="sql/00002_test_result_audit_test_type_version_trigger.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00003_test_result_audit_test_type_version_trigger.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00004_auth_into_service_table.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00005_approval_region_table.sql" relativeToChangelogFile="true"/>
     <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
+    <include  file="seedData/seedData.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
