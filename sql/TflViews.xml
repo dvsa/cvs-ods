@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet  author="cvs"  id="createView-tfl-views">  
+        <createView  catalogName="cat"  
+            encoding="UTF-8"  
+            path="tfl_view_raw.sql"  
+	        relativeToChangelogFile="true"           
+            remarks="New view with data required for TfL"  
+            replaceIfExists="false"     
+            schemaName="CVSNOP"  
+            viewName="tfl_view"></createView>  
+        <createView  catalogName="cat"  
+            encoding="UTF-8"  
+            path="tfl_view_raw.sql"  
+	        relativeToChangelogFile="true"              
+            remarks="New view with data required for TfL"  
+            replaceIfExists="false"     
+            schemaName="CVSNOP"  
+            viewName="tfl_view_raw"></createView>  
+    </changeSet>
+</databaseChangeLog>
