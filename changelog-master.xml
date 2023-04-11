@@ -15,4 +15,5 @@
     <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
     <include  file="sql/20000_evl_temporary_tweak_sp.sql" relativeToChangelogFile="true"/>
     <include  file="referenceData/referenceData.xml" relativeToChangelogFile="true"/>
+    <include  file="sql/TflViews.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
