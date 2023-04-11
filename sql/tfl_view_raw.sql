@@ -1,3 +1,5 @@
+--liquibase formatted sql
+--changeset liquibase:tfl_raw -endDelimiter:; runOnChange:true
 CREATE OR REPLACE VIEW tfl_view_raw AS
 SELECT CONCAT(
        v.vrm_trm,","
@@ -9,21 +11,11 @@ SELECT CONCAT(
 		WHEN 'LF' THEN '02'
 		WHEN 'LP' THEN
           CASE IFNULL(fe.emissionStandard,"")
-           WHEN '0.16 g/kWh Euro 3 PM' THEN '01,09,' -- 'A'
-           WHEN '0.08 g/kWh Euro 3 PM' THEN '01,09,' -- 'B'
-           WHEN '0.03 g/kWh Euro IV PM' THEN '01,10,' -- 'D'           
-           WHEN '0.10 g/kWh Euro 3 PM' THEN '01,04,' -- 'E'
-           WHEN 'Gas Euro IV PM' THEN '01,12,' -- 'X'            
---           WHEN 'C' THEN '' -- 'C'           
---           WHEN 'F' THEN '' -- 'F'  
---           WHEN 'G' THEN '01,05,' -- 'G'  
---           WHEN 'H' THEN '' -- 'H'    
--- 		     WHEN '0.32 g/kWh Euro II PM' THEN '' -- 'I'   
---           WHEN 'Euro VI' THEN '' -- 'J'   
---           WHEN 'Euro 3' THEN '' -- 'M'   
---           WHEN 'Euro 4' THEN '' -- 'N'   
---           WHEN 'Euro 6' THEN '' -- 'O'   
---           WHEN 'Full Electric' THEN '' -- 'P'   
+           WHEN '0.16 g/kWh Euro 3 PM' THEN '01,09,'
+           WHEN '0.08 g/kWh Euro 3 PM' THEN '01,09,'
+           WHEN '0.03 g/kWh Euro IV PM' THEN '01,10,'      
+           WHEN '0.10 g/kWh Euro 3 PM' THEN '01,04,'
+           WHEN 'Gas Euro IV PM' THEN '01,12,'
            ELSE 'UNK'
           END  
 		ELSE 'UNK'
