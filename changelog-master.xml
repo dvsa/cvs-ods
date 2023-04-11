@@ -12,5 +12,6 @@
     <include  file="sql/00005_approval_region_table.sql" relativeToChangelogFile="true"/>
     <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
     <include  file="referenceData/referenceData.xml" relativeToChangelogFile="true"/>
-    <include  file="sql/TflViews.xml" relativeToChangelogFile="true"/>
+    <include  file="sql/tfl_view_raw.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/tfl_view.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

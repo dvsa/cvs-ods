@@ -1,3 +1,5 @@
+--liquibase formatted sql
+--changeset liquibase:tfl_raw -endDelimiter:; runOnChange:true
 CREATE OR REPLACE VIEW tfl_view AS
 SELECT 
        v.vrm_trm
