@@ -46,7 +46,5 @@ SELECT
   JOIN CVSNOP.fuel_emission fe
 	ON (fe.id = tr.fuel_emission_id)
  WHERE SUBSTR(tr.certificateNumber,1,2) IN ('LP', 'LF')
-   AND tt.testTypeName LIKE '%LEC%'
-   AND tr.certificateNumber = 'LF082001'
-   ;
+   AND tt.testTypeName LIKE '%LEC%';
    
