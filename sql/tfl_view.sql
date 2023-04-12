@@ -6,7 +6,6 @@ SELECT
       ,v.vin
       ,tr.certificateNumber
       ,IFNULL(fe.modTypeCode,"")
-      ,IFNULL(fe.emissionStandard,"")
 	  ,CASE SUBSTR(tr.certificateNumber,1,2)
 		WHEN 'LF' THEN '02'
 		WHEN 'LP' THEN
@@ -16,16 +15,6 @@ SELECT
            WHEN '0.03 g/kWh Euro IV PM' THEN '01,10,' -- 'D'           
            WHEN '0.10 g/kWh Euro 3 PM' THEN '01,04,' -- 'E'
            WHEN 'Gas Euro IV PM' THEN '01,12,' -- 'X'            
---           WHEN 'C' THEN '' -- 'C'           
---           WHEN 'F' THEN '' -- 'F'  
---           WHEN 'G' THEN '01,05,' -- 'G'  
---           WHEN 'H' THEN '' -- 'H'    
--- 		     WHEN '0.32 g/kWh Euro II PM' THEN '' -- 'I'   
---           WHEN 'Euro VI' THEN '' -- 'J'   
---           WHEN 'Euro 3' THEN '' -- 'M'   
---           WHEN 'Euro 4' THEN '' -- 'N'   
---           WHEN 'Euro 6' THEN '' -- 'O'   
---           WHEN 'Full Electric' THEN '' -- 'P'          
            ELSE 'UNK'
           END  
 		ELSE 'UNK'
@@ -34,8 +23,6 @@ SELECT
       ,DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d')
 	  ,ts.pNumber
       ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d')
-      ,tt.testTypeName
-      ,tt.testTypeClassification
   FROM CVSNOP.test_type tt
   JOIN CVSNOP.test_result tr
     ON (tt.id = tr.test_type_id)
