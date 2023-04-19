@@ -2,9 +2,9 @@
 --changeset liquibase:tfl_raw -endDelimiter:; runOnChange:true
 CREATE OR REPLACE VIEW tfl_view AS
 SELECT 
-       v.vrm_trm
-      ,v.vin
-      ,tr.certificateNumber
+       v.vrm_trm as registrationMark
+      ,v.vin     as vin
+      ,tr.certificateNumber as certificateNumber
       ,IFNULL(fe.modTypeCode,"")
 	  ,CASE SUBSTR(tr.certificateNumber,1,2)
 		WHEN 'LF' THEN '02'
@@ -18,11 +18,10 @@ SELECT
            ELSE 'UNK'
           END  
 		ELSE 'UNK'
-	   END
-      ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d')
-      ,DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d')
-	  ,ts.pNumber
-      ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d')
+	   END as modTypeCode
+      ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d') as testStartDate
+      ,DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d') as testExpiryDate 
+	    ,ts.pNumber as premise
   FROM CVSNOP.test_type tt
   JOIN CVSNOP.test_result tr
     ON (tt.id = tr.test_type_id)

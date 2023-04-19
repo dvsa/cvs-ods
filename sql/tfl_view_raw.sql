@@ -32,8 +32,8 @@ SELECT CONCAT(
 	   END,","
       ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d'),","
       ,IFNULL(DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d'),""),","
-	  ,ts.pNumber,","
-      ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d'))
+	  ,ts.pNumber,"," ) as  tfl_str
+      ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d') as testStartDate
   FROM CVSNOP.test_type tt
   JOIN CVSNOP.test_result tr
     ON (tt.id = tr.test_type_id)
