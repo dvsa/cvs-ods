@@ -20,7 +20,16 @@ SELECT
 		ELSE 'UNK'
 	   END as modTypeCode
       ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d') as testStartDate
-      ,DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d') as testExpiryDate 
+      ,CASE
+        WHEN tr.testExpiryDate IS NOT NULL 
+          THEN DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d')
+        WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NOT NULL 
+          THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testTypeStartTimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
+        WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testtypeendtimestamp IS NOT NULL
+          THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testtypeendtimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
+        ELSE
+          NULL
+      END as testExpiryDate 
 	    ,ts.pNumber as premise
   FROM CVSNOP.test_type tt
   JOIN CVSNOP.test_result tr

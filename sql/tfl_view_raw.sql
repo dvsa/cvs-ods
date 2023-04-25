@@ -31,7 +31,16 @@ SELECT CONCAT(
 		ELSE 'UNK'
 	   END,","
       ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d'),","
-      ,IFNULL(DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d'),""),","
+      ,CASE
+        WHEN tr.testExpiryDate IS NOT NULL 
+          THEN DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d')
+        WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NOT NULL 
+          THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testTypeStartTimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
+        WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testtypeendtimestamp IS NOT NULL
+          THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testtypeendtimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
+        ELSE
+          ""
+      END,","
 	  ,ts.pNumber,"," ) as  tfl_str
       ,DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d') as testStartDate
   FROM CVSNOP.test_type tt
