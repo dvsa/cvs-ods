@@ -53,20 +53,20 @@ CREATE OR REPLACE VIEW tfl_view_raw AS
 SELECT
     CONCAT(
         registrationMark,
-        "",
+        ",",
         vehicleIdentificationNumber,
-        "",
+        ",",
         certificateNumber,
-        "",
+        ",",
         modTypeCode,
-        "",
+        ",",
         emissionCode,
-        "",
+        ",",
         testStartDate,
-        "",
+        ",",
         testExpiryDate, 
-        "",
+        ",",
         premise
     ) as  tfl_str,
     testStartDate
-FROM tfl_view
+FROM tfl_view;
