@@ -28,7 +28,7 @@ SELECT
         WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testtypeendtimestamp IS NOT NULL
           THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testtypeendtimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
         ELSE
-          NULL
+          ""
       END as testExpiryDate 
 	    ,ts.pNumber as premise
   FROM CVSNOP.test_type tt
