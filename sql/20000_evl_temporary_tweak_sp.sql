@@ -1,7 +1,5 @@
 --liquibase formatted sql
---changeset liquibase:3 splitStatements:true endDelimiter:; context:dev runOnChange:true
-
-DELIMITER //
+--changeset liquibase:3 splitStatements:true endDelimiter:// context:dev runOnChange:true
 
 CREATE DEFINER=CURRENT_USER PROCEDURE IF NOT EXISTS PrepareVTDataForEVL()
 /* 
@@ -14,13 +12,13 @@ BEGIN
 	    This will be used later as a way to exclude VT certificates for
 	    vehicles that already have one in CVS.
     */
-	TRUNCATE `CVSNOP`.`vt_evl_00_cvs_system_numbers`;
-	INSERT INTO `CVSNOP`.`vt_evl_00_cvs_system_numbers`
+	TRUNCATE `vt_evl_00_cvs_system_numbers`;
+	INSERT INTO `vt_evl_00_cvs_system_numbers`
         SELECT 
             v.`system_number`
-        FROM `CVSNOP`.`test_result` AS t
-        JOIN `CVSNOP`.`test_type` AS tt ON t.`test_type_id` = tt.`id`
-        JOIN `CVSNOP`.`vehicle` AS v ON t.`vehicle_id` = v.`id`
+        FROM `test_result` AS t
+        JOIN `test_type` AS tt ON t.`test_type_id` = tt.`id`
+        JOIN `vehicle` AS v ON t.`vehicle_id` = v.`id`
         WHERE 
             t.`testExpiryDate` > DATE(NOW() - INTERVAL 3 DAY)
             AND t.`testStatus` != 'cancelled'
@@ -39,8 +37,8 @@ BEGIN
 	    information about the vehicle to be used for matching
 	    purposes.
     */
-	TRUNCATE `CVSNOP`.`vt_evl_01_static_set`;
-	INSERT INTO `CVSNOP`.`vt_evl_01_static_set`
+	TRUNCATE `vt_evl_01_static_set`;
+	INSERT INTO `vt_evl_01_static_set`
         SELECT 
             IFNULL(v.`CURR_REGMK`, v.`TRAILER_ID`)  AS vrm
             ,vt.`VEHICLE_ID`                        AS vrm_test_record
@@ -77,8 +75,8 @@ BEGIN
 	    are assigned to system numbers that DO NOT have a valid
 	    certificate in CVS.
 	*/
-	TRUNCATE `CVSNOP`.`vt_evl_02_cvs_removed`;
-	INSERT INTO `CVSNOP`.`vt_evl_02_cvs_removed`
+	TRUNCATE `vt_evl_02_cvs_removed`;
+	INSERT INTO `vt_evl_02_cvs_removed`
         SELECT
             vt.`vrm`
             ,vt.`vrm_test_record`
@@ -87,8 +85,8 @@ BEGIN
             ,vt.`certificateNumber`
             ,vt.`testStartDate`
             ,vt.`testExpiryDate`
-        FROM `CVSNOP`.`vt_evl_01_static_set` AS vt
-        LEFT JOIN `CVSNOP`.`vt_evl_00_cvs_system_numbers` AS cvs ON vt.`system_number` = cvs.`system_number`
+        FROM `vt_evl_01_static_set` AS vt
+        LEFT JOIN `vt_evl_00_cvs_system_numbers` AS cvs ON vt.`system_number` = cvs.`system_number`
         WHERE
             cvs.`system_number` IS NULL
             AND vt.`testExpiryDate` > DATE(NOW() - INTERVAL 3 DAY)
@@ -99,8 +97,8 @@ BEGIN
 	    assigned to system numbers that HAVE NOT had a failed annual
 	    test in CVS with a more recent test date.
 	*/
-	TRUNCATE `CVSNOP`.`vt_evl_03_failures_removed`;
-	INSERT INTO `CVSNOP`.`vt_evl_03_failures_removed` 
+	TRUNCATE `vt_evl_03_failures_removed`;
+	INSERT INTO `vt_evl_03_failures_removed` 
         SELECT
             vt.`vrm`
             ,vt.`vrm_test_record`
@@ -109,15 +107,15 @@ BEGIN
             ,vt.`certificateNumber`
             ,vt.`testStartDate`
             ,vt.`testExpiryDate`
-        FROM `CVSNOP`.`vt_evl_02_cvs_removed` AS vt
+        FROM `vt_evl_02_cvs_removed` AS vt
         LEFT JOIN 
         (
             SELECT 
                 v.`system_number`
                 ,DATE(MAX(tr.`testTypeStartTimestamp`)) AS testTypeStartTimestamp
-            FROM `CVSNOP`.`test_result` tr
-            JOIN `CVSNOP`.`test_type` tt ON tr.`test_type_id` = tt.`id`
-            JOIN `CVSNOP`.`vehicle` v ON tr.`vehicle_id` = v.`id`
+            FROM `test_result` tr
+            JOIN `test_type` tt ON tr.`test_type_id` = tt.`id`
+            JOIN `vehicle` v ON tr.`vehicle_id` = v.`id`
             WHERE 
                 tr.`testResult` = 'fail' 
                 AND tt.`testTypeClassification` = 'Annual With Certificate'
@@ -131,5 +129,3 @@ BEGIN
 END
 
 //
-
-DELIMITER ;
