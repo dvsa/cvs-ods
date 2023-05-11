@@ -2,24 +2,39 @@
 --changeset liquibase:3 -multiple-tables:1 splitStatements:true endDelimiter:; context:dev runOnChange:true
 CREATE OR REPLACE VIEW tfl_view AS
 SELECT 
-    v.vrm_trm as registrationMark,
-    v.vin     as vehicleIdentificationNumber,
-    tr.certificateNumber as certificateNumber,
-    IFNULL(fe.modTypeCode,"") as modTypeCode,
+    v.vrm_trm as vrm,
+    v.vin     as vin,
+    tr.certificateNumber as SerialNumberOfCertificate,
+    IFNULL(fe.modTypeCode,"") as CertificationModificationType,
+
     CASE SUBSTR(tr.certificateNumber,1,2)
-        WHEN 'LF' THEN '02'
-        WHEN 'LP' THEN
-            CASE IFNULL(fe.emissionStandard,"")
-                WHEN '0.16 g/kWh Euro 3 PM' THEN '01,09,' -- 'A'
-                WHEN '0.08 g/kWh Euro 3 PM' THEN '01,09,' -- 'B'
-                WHEN '0.03 g/kWh Euro IV PM' THEN '01,10,' -- 'D'           
-                WHEN '0.10 g/kWh Euro 3 PM' THEN '01,04,' -- 'E'
-                WHEN 'Gas Euro IV PM' THEN '01,12,' -- 'X'            
-                ELSE 'UNK'
-            END  
-        ELSE 'UNK'
-    END as emissionCode,
-    DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d') as testStartDate,
+        WHEN 'LP' THEN 1
+        WHEN 'LF' THEN 2
+    END AS TestStatus,
+
+    CASE IFNULL(fe.emissionStandard,"")
+
+        WHEN 'Pre-Euro'                 THEN 1        
+        WHEN 'Euro 1'                   THEN 2        
+        WHEN 'Euro 2'                   THEN 3
+        WHEN 'Euro 3'                   THEN 4
+        WHEN '0.08 g/kWh Euro 3 PM'     THEN 4
+        WHEN '0.10 g/kWh Euro 3 PM'     THEN 4
+        WHEN '0.16 g/kWh Euro 3 PM'     THEN 4
+        WHEN 'Euro 4'                   THEN 5
+        WHEN '0.03 g/kWh Euro 4 PM'     THEN 5
+        WHEN 'Euro 5'                   THEN 6
+        WHEN 'Euro I'                   THEN 7
+        WHEN 'Euro II'                  THEN 8
+        WHEN '0.32 g/kWh Euro II PM'    THEN 8
+        WHEN 'Euro III'                 THEN 9
+        WHEN 'Euro IV'                  THEN 10
+        WHEN '0.03 g/kWh Euro IV PM'    THEN 10
+        WHEN 'Euro V'                   THEN 11
+        WHEN 'N/A (non diesel)'         THEN 12
+        ELSE 13
+    END AS PMEuropeanEmissionClassificationCode,
+    DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d') as ValidFromDate,
     CASE
         WHEN tr.testExpiryDate IS NOT NULL 
             THEN DATE_FORMAT(tr.testExpiryDate, '%Y-%m-%d')
@@ -29,8 +44,9 @@ SELECT
             THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testtypeendtimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
         ELSE
             ""
-    END as testExpiryDate, 
-	ts.pNumber as premise
+    END AS ExpiryDate, 
+	ts.pNumber AS IssuedBy
+
 FROM 
     CVSNOP.test_type tt
 JOIN
@@ -52,21 +68,22 @@ WHERE
 CREATE OR REPLACE VIEW tfl_view_raw AS
 SELECT
     CONCAT(
-        registrationMark,
+        vrm,
         ",",
-        vehicleIdentificationNumber,
+        vin,
         ",",
-        certificateNumber,
+        SerialNumberOfCertificate,
         ",",
-        modTypeCode,
+        CertificationModificationType,
         ",",
-        emissionCode,
+        TestStatus,
         ",",
-        testStartDate,
+        PMEuropeanEmissionClassificationCode,
         ",",
-        testExpiryDate, 
+        ValidFromDate, 
         ",",
-        premise
-    ) as  tfl_str,
-    testStartDate
+        ExpiryDate,
+        ",",
+        IssuedBy
+    ) as  tfl_str
 FROM tfl_view;
