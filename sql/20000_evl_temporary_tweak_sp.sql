@@ -1,7 +1,8 @@
 --liquibase formatted sql
 --changeset liquibase:3 splitStatements:true endDelimiter:// context:dev runOnChange:true
 
-CREATE DEFINER=CURRENT_USER PROCEDURE IF NOT EXISTS PrepareVTDataForEVL()
+DROP PROCEDURE IF EXISTS PrepareVTDataForEVL;
+CREATE DEFINER=CURRENT_USER PROCEDURE PrepareVTDataForEVL()
 /* 
     Prepares valid test certificates from VT for combination with the CVS EVL
     feed during the interim time period that data remediation work is ongoing.
