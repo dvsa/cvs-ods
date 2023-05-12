@@ -144,7 +144,8 @@ BEGIN
             ,vt.`testExpiryDate`
         FROM `vt_evl_03_failures_removed` AS vt
 	;
-
+    COMMIT;
+    
 END
 
 //
