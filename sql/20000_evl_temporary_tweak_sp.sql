@@ -127,6 +127,24 @@ BEGIN
             fails.`system_number` IS NULL OR fails.`testTypeStartTimestamp` < vt.`testStartDate`
 	;
 
+	/*
+        Insert only the fields required to the final table ready for union
+        with the CVS data in the evl_view. 
+        Final table (vt_evl_additions) has been excluded from the numbered naming
+        convention in case more processing steps are added in the future. Less rework
+        will be required.
+        This step should be used to apply any business rule logic deemed
+        appropriate.
+	*/
+	TRUNCATE `vt_evl_additions`;
+	INSERT INTO `vt_evl_additions` 
+        SELECT
+            vt.`vrm`
+            ,vt.`certificateNumber`
+            ,vt.`testExpiryDate`
+        FROM `vt_evl_03_failures_removed` AS vt
+	;
+
 END
 
 //

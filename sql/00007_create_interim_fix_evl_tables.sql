@@ -43,3 +43,11 @@ CREATE TABLE IF NOT EXISTS `vt_evl_03_failures_removed`
     ,`testExpiryDate`       DATETIME
 )
     ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `vt_evl_additions`
+(
+    `vrm_trm`                   VARCHAR(20)
+    ,`certificateNumber`    VARCHAR(12)
+    ,`testExpiryDate`       DATETIME
+)
+    ENGINE = InnoDB;
