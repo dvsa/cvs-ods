@@ -13,7 +13,6 @@ SELECT
     END AS TestStatus,
 
     CASE IFNULL(fe.emissionStandard,"")
-
         WHEN 'Pre-Euro'                 THEN 1        
         WHEN 'Euro 1'                   THEN 2        
         WHEN 'Euro 2'                   THEN 3
@@ -45,8 +44,8 @@ SELECT
         ELSE
             ""
     END AS ExpiryDate, 
-	ts.pNumber AS IssuedBy
-
+	ts.pNumber AS IssuedBy,
+    DATE_FORMAT(tr.createdAt, '%Y-%m-%d') as IssueDate
 FROM 
     CVSNOP.test_type tt
 JOIN
@@ -63,7 +62,7 @@ JOIN
     ON (fe.id = tr.fuel_emission_id)
 WHERE
     SUBSTR(tr.certificateNumber,1,2) IN ('LP', 'LF')
-    AND tt.testTypeName LIKE '%LEC%';
+    AND tt.id in (23, 29, 30, 31, 36, 38, 47, 81, 82, 132, 143, 158, 180, 196);
 
 CREATE OR REPLACE VIEW tfl_view_raw AS
 SELECT
@@ -84,6 +83,8 @@ SELECT
         ",",
         ExpiryDate,
         ",",
-        IssuedBy
+        IssuedBy,
+        ",",
+        IssueDate
     ) as  tfl_str
 FROM tfl_view;
