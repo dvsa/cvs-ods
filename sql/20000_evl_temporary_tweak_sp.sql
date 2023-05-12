@@ -22,8 +22,8 @@ BEGIN
         JOIN `vehicle` AS v ON t.`vehicle_id` = v.`id`
         WHERE 
             t.`testExpiryDate` > DATE(NOW() - INTERVAL 3 DAY)
-            AND t.`testStatus` != 'cancelled'
-            AND tt.`testTypeClassification` = 'Annual With Certificate'
+            AND LOWER(t.`testStatus`) != 'cancelled'
+            AND LOWER(tt.`testTypeClassification`) = 'annual with certificate'
             AND 
             (
                 t.`certificateNumber` IS NOT NULL
@@ -61,8 +61,8 @@ BEGIN
             (
                 -- From investigations into the legacy ETL codebase it seems
                 -- that these are commonly chosen as filters for "annual" tests
-                appl.`APPL_TYPE` IN ('aal','aas','aav','aat','rpv','rpt')
-                OR appl.`DESC0` LIKE '%annual%'
+                LOWER(appl.`APPL_TYPE`) IN ('aal','aas','aav','aat','rpv','rpt')
+                OR LOWER(appl.`DESC0`) LIKE '%annual%'
             ) 
             AND IFNULL(v.`CURR_REGMK`, v.`TRAILER_ID`) <> ' '
             AND IFNULL(v.`CURR_REGMK`, v.`TRAILER_ID`) IS NOT NULL
@@ -118,8 +118,8 @@ BEGIN
             JOIN `test_type` tt ON tr.`test_type_id` = tt.`id`
             JOIN `vehicle` v ON tr.`vehicle_id` = v.`id`
             WHERE 
-                tr.`testResult` = 'fail' 
-                AND tt.`testTypeClassification` = 'Annual With Certificate'
+                LOWER(tr.`testResult`) = 'fail' 
+                AND LOWER(tt.`testTypeClassification`) = 'annual with certificate'
                 AND tr.`testTypeStartTimestamp` >= DATE(NOW() - INTERVAL 1 YEAR)
             GROUP BY v.`system_number`
         ) AS fails ON vt.`system_number` = fails.`system_number`
