@@ -3,7 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS `vt_evl_00_cvs_system_numbers`
 (
-    `system_number`   INT UNSIGNED NOT NULL
+    `system_number`   VARCHAR(8)
     ,PRIMARY KEY(`system_number`)
 )
     ENGINE = InnoDB;
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `vt_evl_01_static_set`
 (
     `vrm`                   VARCHAR(20)
     ,`vrm_test_record` 	    VARCHAR(20)
-    ,`system_number` 	    INT UNSIGNED
+    ,`system_number` 	    VARCHAR(8)
     ,`vin`                  VARCHAR(21)
     ,`certificateNumber`    VARCHAR(12)
     ,`testStartDate`        DATETIME
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `vt_evl_02_cvs_removed`
 (
     `vrm`                   VARCHAR(20)
     ,`vrm_test_record`      VARCHAR(20)
-    ,`system_number`        INT UNSIGNED
+    ,`system_number`        VARCHAR(8)
     ,`vin`                  VARCHAR(21)
     ,`certificateNumber`    VARCHAR(12)
     ,`testStartDate`        DATETIME
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `vt_evl_03_failures_removed`
 (
     `vrm`                   VARCHAR(20)
     ,`vrm_test_record`      VARCHAR(20)
-    ,`system_number`        INT UNSIGNED
+    ,`system_number`        VARCHAR(8)
     ,`vin`                  VARCHAR(21)
     ,`certificateNumber`    VARCHAR(12)
     ,`testStartDate`        DATETIME
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `vt_evl_03_failures_removed`
 
 CREATE TABLE IF NOT EXISTS `vt_evl_additions`
 (
-    `vrm_trm`                   VARCHAR(20)
+    `vrm_trm`               VARCHAR(20)
     ,`certificateNumber`    VARCHAR(12)
     ,`testExpiryDate`       DATETIME
 )
