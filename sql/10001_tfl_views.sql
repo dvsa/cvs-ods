@@ -1,17 +1,15 @@
 --liquibase formatted sql
---changeset liquibase:3 -multiple-tables:1 splitStatements:true endDelimiter:; context:dev runOnChange:true
+--changeset liquibase:3 splitStatements:true endDelimiter:; context:dev runOnChange:true
 CREATE OR REPLACE VIEW tfl_view AS
 SELECT 
-    v.vrm_trm as vrm,
-    v.vin     as vin,
+    v.vrm_trm as VRM,
+    v.vin     as VIN,
     tr.certificateNumber as SerialNumberOfCertificate,
     IFNULL(fe.modTypeCode,"") as CertificationModificationType,
-
     CASE SUBSTR(tr.certificateNumber,1,2)
         WHEN 'LP' THEN 1
         WHEN 'LF' THEN 2
     END AS TestStatus,
-
     CASE IFNULL(fe.emissionStandard,"")
         WHEN 'Pre-Euro'                 THEN 1        
         WHEN 'Euro 1'                   THEN 2        
@@ -39,18 +37,18 @@ SELECT
             THEN DATE_FORMAT(LAST_DAY(tr.testExpiryDate), '%Y-%m-%d')
         WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NOT NULL 
             THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testTypeStartTimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
-        WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testtypeendtimestamp IS NOT NULL
+        WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testTypeEndTimestamp IS NOT NULL
             THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testTypeEndTimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
         ELSE
             ""
-    END AS ExpiryDate, 
+    END AS ExpiryDate,
 	ts.pNumber AS IssuedBy,
     CASE
         WHEN tr.createdAt IS NOT NULL 
             THEN DATE_FORMAT(tr.createdAt, '%Y-%m-%d') 
-        WHEN tr.createdAt IS NULL AND testTypeStartTimestamp IS NOT NULL 
+        WHEN tr.createdAt IS NULL AND tr.testTypeStartTimestamp IS NOT NULL 
             THEN DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d')
-        WHEN tr.createdAt IS NULL AND testTypeStartTimestamp IS NULL AND testtypeendtimestamp IS NOT NULL
+        WHEN tr.createdAt IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testTypeEndTimestamp IS NOT NULL
             THEN DATE_FORMAT(tr.testTypeEndTimestamp, '%Y-%m-%d')
         ELSE
             ""
@@ -95,5 +93,6 @@ SELECT
         IssuedBy,
         ",",
         IssueDate
-    ) as  tfl_str
+    ) as  tfl_str,
+    ValidFromDate AS testStartDate
 FROM tfl_view;
