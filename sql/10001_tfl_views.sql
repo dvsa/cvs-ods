@@ -40,7 +40,7 @@ SELECT
         WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NOT NULL 
             THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testTypeStartTimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
         WHEN tr.testExpiryDate IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testtypeendtimestamp IS NOT NULL
-            THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testtypeendtimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
+            THEN DATE_FORMAT(LAST_DAY(DATE_ADD(tr.testTypeEndTimestamp, INTERVAL 1 YEAR)), '%Y-%m-%d')
         ELSE
             ""
     END AS ExpiryDate, 
@@ -51,7 +51,7 @@ SELECT
         WHEN tr.createdAt IS NULL AND testTypeStartTimestamp IS NOT NULL 
             THEN DATE_FORMAT(tr.testTypeStartTimestamp, '%Y-%m-%d')
         WHEN tr.createdAt IS NULL AND testTypeStartTimestamp IS NULL AND testtypeendtimestamp IS NOT NULL
-            THEN DATE_FORMAT(tr.testtypeendtimestamp, '%Y-%m-%d')
+            THEN DATE_FORMAT(tr.testTypeEndTimestamp, '%Y-%m-%d')
         ELSE
             ""
     END AS IssueDate
