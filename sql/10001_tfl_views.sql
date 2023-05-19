@@ -70,29 +70,3 @@ JOIN
 WHERE
     SUBSTR(tr.certificateNumber,1,2) IN ('LP', 'LF')
     AND tt.id in (23, 29, 30, 31, 36, 38, 47, 81, 82, 132, 143, 158, 180, 196);
-
-CREATE OR REPLACE VIEW tfl_view_raw AS
-SELECT
-    CONCAT(
-        vrm,
-        ",",
-        vin,
-        ",",
-        SerialNumberOfCertificate,
-        ",",
-        CertificationModificationType,
-        ",",
-        TestStatus,
-        ",",
-        PMEuropeanEmissionClassificationCode,
-        ",",
-        ValidFromDate, 
-        ",",
-        ExpiryDate,
-        ",",
-        IssuedBy,
-        ",",
-        IssueDate
-    ) as  tfl_str,
-    ValidFromDate AS testStartDate
-FROM tfl_view;
