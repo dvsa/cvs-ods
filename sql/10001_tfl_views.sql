@@ -69,4 +69,4 @@ JOIN
     ON (fe.id = tr.fuel_emission_id)
 WHERE
     SUBSTR(tr.certificateNumber,1,2) IN ('LP', 'LF')
-    AND tt.id in (23, 29, 30, 31, 36, 38, 47, 81, 82, 132, 143, 158, 180, 196);
+    AND tt.testTypeName REGEXP '[[:<:]]LEC[[:>:]]|[[:<:]]Low Emissions Certificate[[:>:]]'
