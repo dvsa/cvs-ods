@@ -52,7 +52,17 @@ SELECT
             THEN DATE_FORMAT(tr.testTypeEndTimestamp, '%Y-%m-%d')
         ELSE
             ""
-    END AS IssueDate
+    END AS IssueDate,
+    CASE
+        WHEN tr.createdAt IS NOT NULL 
+            THEN tr.createdAt
+        WHEN tr.createdAt IS NULL AND tr.testTypeStartTimestamp IS NOT NULL 
+            THEN tr.testTypeStartTimestamp
+        WHEN tr.createdAt IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testTypeEndTimestamp IS NOT NULL
+            THEN tr.testTypeEndTimestamp
+        ELSE
+            NULL
+    END AS IssueDateTime
 FROM 
     CVSNOP.test_type tt
 JOIN
