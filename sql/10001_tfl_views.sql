@@ -6,10 +6,7 @@ SELECT
     v.vin     as VIN,
     tr.certificateNumber as SerialNumberOfCertificate,
     IFNULL(fe.modTypeCode,"") as CertificationModificationType,
-    CASE SUBSTR(tr.certificateNumber,1,2)
-        WHEN 'LP' THEN 1
-        WHEN 'LF' THEN 2
-    END AS TestStatus,
+    1 AS TestStatus,
     CASE IFNULL(fe.emissionStandard,"")
         WHEN 'Pre-Euro'                 THEN 1        
         WHEN 'Euro 1'                   THEN 2        
@@ -52,7 +49,17 @@ SELECT
             THEN DATE_FORMAT(tr.testTypeEndTimestamp, '%Y-%m-%d')
         ELSE
             ""
-    END AS IssueDate
+    END AS IssueDate,
+    CASE
+        WHEN tr.createdAt IS NOT NULL 
+            THEN tr.createdAt
+        WHEN tr.createdAt IS NULL AND tr.testTypeStartTimestamp IS NOT NULL 
+            THEN tr.testTypeStartTimestamp
+        WHEN tr.createdAt IS NULL AND tr.testTypeStartTimestamp IS NULL AND tr.testTypeEndTimestamp IS NOT NULL
+            THEN tr.testTypeEndTimestamp
+        ELSE
+            NULL
+    END AS IssueDateTime
 FROM 
     CVSNOP.test_type tt
 JOIN
@@ -68,5 +75,5 @@ JOIN
     CVSNOP.fuel_emission fe
     ON (fe.id = tr.fuel_emission_id)
 WHERE
-    SUBSTR(tr.certificateNumber,1,2) IN ('LP', 'LF')
+    SUBSTR(tr.certificateNumber,1,2) = 'LP'
     AND tt.testTypeName REGEXP '[[:<:]]LEC[[:>:]]|[[:<:]]Low Emissions Certificate[[:>:]]'
