@@ -76,4 +76,4 @@ JOIN
     ON (fe.id = tr.fuel_emission_id)
 WHERE
     SUBSTR(tr.certificateNumber,1,2) = 'LP'
-    AND tr.testcode in ('lbp','lcp','ldv','lev','lez','lnp','lnv','lnz')
+    AND tr.testCode in ('lbp','lcp','ldv','lev','lez','lnp','lnv','lnz')
