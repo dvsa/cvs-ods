@@ -61,19 +61,19 @@ SELECT
             NULL
     END AS IssueDateTime
 FROM 
-    CVSNOP.test_type tt
+    test_type tt
 JOIN
-    CVSNOP.test_result tr
+    test_result tr
     ON (tt.id = tr.test_type_id)
 JOIN
-    CVSNOP.vehicle v
+    vehicle v
     ON (v.id = tr.vehicle_id)
 JOIN
-    CVSNOP.test_station ts
+    test_station ts
     ON (ts.id = tr.test_station_id)
 JOIN
-    CVSNOP.fuel_emission fe
+    fuel_emission fe
     ON (fe.id = tr.fuel_emission_id)
 WHERE
     SUBSTR(tr.certificateNumber,1,2) = 'LP'
-    AND tt.testTypeName REGEXP '[[:<:]]LEC[[:>:]]|[[:<:]]Low Emissions Certificate[[:>:]]'
+    AND LOWER(tr.testCode) IN ('lbp','lcp','ldv','lev','lez','lnp','lnv','lnz')
