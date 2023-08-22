@@ -5,7 +5,7 @@ SELECT
     v.vrm_trm as VRM,
     v.vin     as VIN,
     tr.certificateNumber as SerialNumberOfCertificate,
-    IFNULL(fe.modTypeCode,"") as CertificationModificationType,
+    IFNULL(fe.modTypeCode,"p") as CertificationModificationType,
     1 AS TestStatus,
     CASE IFNULL(fe.emissionStandard,"")
         WHEN 'Pre-Euro'                 THEN 1        
