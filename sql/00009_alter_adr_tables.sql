@@ -19,10 +19,13 @@ RENAME TABLE    `productListUnNo`               TO `adr_productListUnNo_list`;
 
 ALTER TABLE `adr_additional_notes_guidance`
     DROP FOREIGN KEY adr_additional_notes_guidance_ibfk_1,
+    
     MODIFY COLUMN   `id` 
         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,    
+    
     ADD COLUMN      `adr_details_id`    
         BIGINT UNSIGNED NOT NULL,
+    
     ADD CONSTRAINT  `fk_adr_additional_notes_guidance_adr_details_id`
         FOREIGN KEY (`adr_details_id`)                 
         REFERENCES  `adr_details`(`id`)
@@ -32,12 +35,89 @@ ALTER TABLE `adr_additional_notes_guidance`
 
 ALTER TABLE `adr_additional_notes_number`
 	DROP FOREIGN KEY adr_additional_notes_number_ibfk_1,
+    
     MODIFY COLUMN   `id` 
         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    
     ADD COLUMN      `adr_details_id`    
         BIGINT UNSIGNED NOT NULL,
+    
     ADD CONSTRAINT  `fk_adr_additional_notes_number_adr_details_id`
         FOREIGN KEY (`adr_details_id`)                 
         REFERENCES  `adr_details`(`id`)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION;
+
+/* 
+    CB2-10568
+    Fix datatype mismatches
+*/
+
+ALTER TABLE `adr_details`
+    MODIFY COLUMN `adrTypeApprovalNo`       VARCHAR(40),
+    MODIFY COLUMN `brakeDeclarationIssuer`  VARCHAR(500),
+    MODIFY COLUMN `brakeDeclarationsSeen`   BOOLEAN,
+    MODIFY COLUMN `brakeEndurance`          BOOLEAN,
+    MODIFY COLUMN `compatibilityGroupJ`     VARCHAR(1),
+    MODIFY COLUMN `declarationsSeen`        BOOLEAN,
+    MODIFY COLUMN `listStatementApplicable` BOOLEAN,
+    MODIFY COLUMN `weight`                  DOUBLE(10, 2)
+    MODIFY COLUMN `tankTypeAppNo`           VARCHAR(65),
+    MODIFY COLUMN `yearOfManufacture`       SMALLINT; 
+
+ALTER TABLE `adr_productListUnNo_list`
+    MODIFY COLUMN `name`                    VARCHAR(1500); 
+
+/* 
+    CB2-10569
+    Create new tables
+*/
+
+CREATE TABLE IF NOT EXISTS `adr_additional_examiner_notes`
+(
+    `id`            	BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `adr_details_id` 	BIGINT UNSIGNED NOT NULL,
+    `note`				VARCHAR(1024),
+    `createdAtDate`		DATE,
+    `lastUpdatedBy`		VARCHAR(250),		 
+    PRIMARY KEY (`id`),
+    CONSTRAINT  `fk_adr_additional_examiner_notes_adr_details_id`
+        FOREIGN KEY (`adr_details_id`)                 
+        REFERENCES  `adr_details`(`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+)
+    ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `adr_memos_apply`
+(
+    `id`            	BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `adr_details_id` 	BIGINT UNSIGNED NOT NULL,
+    `memo`				VARCHAR(250),		 
+    PRIMARY KEY (`id`),
+    CONSTRAINT  `fk_adr_memos_apply_adr_details_id`
+        FOREIGN KEY (`adr_details_id`)                 
+        REFERENCES  `adr_details`(`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+)
+    ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `adr_tc3Details`
+(
+    `id`            	    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `adr_details_id` 	    BIGINT UNSIGNED NOT NULL,
+    `tc3Type`			    VARCHAR(250),
+    `tc3PeriodicNumber`     VARCHAR(75),
+    `tc3PeriodicExpiryDate` DATE,
+    PRIMARY KEY (`id`),
+    CONSTRAINT  `fk_adr_tc3Details_adr_details_id`
+        FOREIGN KEY (`adr_details_id`)                 
+        REFERENCES  `adr_details`(`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
+)
+    ENGINE = InnoDB;
+
+
+
