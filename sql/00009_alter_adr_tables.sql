@@ -61,7 +61,7 @@ ALTER TABLE `adr_details`
     MODIFY COLUMN `compatibilityGroupJ`     VARCHAR(1),
     MODIFY COLUMN `declarationsSeen`        BOOLEAN,
     MODIFY COLUMN `listStatementApplicable` BOOLEAN,
-    MODIFY COLUMN `weight`                  DOUBLE(10, 2)
+    MODIFY COLUMN `weight`                  DOUBLE(10, 2),
     MODIFY COLUMN `tankTypeAppNo`           VARCHAR(65),
     MODIFY COLUMN `yearOfManufacture`       SMALLINT; 
 
