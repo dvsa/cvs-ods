@@ -6,16 +6,18 @@
 RENAME TABLE `adr` TO `adr_details`;
 
 ALTER TABLE `adr_details`
-    MODIFY COLUMN   `adrTypeApprovalNo`       VARCHAR(40),
-    MODIFY COLUMN   `brakeDeclarationIssuer`  VARCHAR(500),
-    MODIFY COLUMN   `brakeDeclarationsSeen`   BOOLEAN,
-    MODIFY COLUMN   `brakeEndurance`          BOOLEAN,
-    MODIFY COLUMN   `compatibilityGroupJ`     VARCHAR(1),
-    MODIFY COLUMN   `declarationsSeen`        BOOLEAN,
-    MODIFY COLUMN   `listStatementApplicable` BOOLEAN,
-    MODIFY COLUMN   `weight`                  DOUBLE(10, 2),
-    MODIFY COLUMN   `tankTypeAppNo`           VARCHAR(65),
-    MODIFY COLUMN   `yearOfManufacture`       SMALLINT,
+    MODIFY COLUMN   `adrTypeApprovalNo`         VARCHAR(40),
+    MODIFY COLUMN   `brakeDeclarationIssuer`    VARCHAR(500),
+    MODIFY COLUMN   `brakeDeclarationsSeen`     BOOLEAN,
+    MODIFY COLUMN   `brakeEndurance`            BOOLEAN,
+    MODIFY COLUMN   `compatibilityGroupJ`       VARCHAR(1),
+    MODIFY COLUMN   `declarationsSeen`          BOOLEAN,
+    MODIFY COLUMN   `listStatementApplicable`   BOOLEAN,
+    MODIFY COLUMN   `weight`                    DOUBLE(10, 2),
+    MODIFY COLUMN   `tankTypeAppNo`             VARCHAR(65),
+    MODIFY COLUMN   `yearOfManufacture`         SMALLINT,
+
+    ADD COLUMN      `m145Statement`             BOOLEAN,
 
     DROP COLUMN     `memosApply`,
     DROP COLUMN     `additionalExaminerNotes`,
