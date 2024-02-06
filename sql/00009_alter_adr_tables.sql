@@ -16,6 +16,7 @@ ALTER TABLE `adr_details`
     MODIFY COLUMN   `weight`                    DOUBLE(10, 2),
     MODIFY COLUMN   `tankTypeAppNo`             VARCHAR(65),
     MODIFY COLUMN   `yearOfManufacture`         SMALLINT,
+    MODIFY COLUMN   `substancesPermitted`       VARCHAR(250),
 
     ADD COLUMN      `m145Statement`             BOOLEAN,
 
