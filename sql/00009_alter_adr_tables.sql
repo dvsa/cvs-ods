@@ -208,3 +208,26 @@ CREATE TABLE IF NOT EXISTS `adr_tc3Details`
     INDEX `idx_adr_tc3Details_adr_details_id` (`adr_details_id` ASC)
 )
     ENGINE = InnoDB;
+
+--  CREATING ADR_PASSCERTIFICATEDETAILS TABLE
+CREATE TABLE IF NOT EXISTS `adr_PassCertificateDetails`
+(
+    `id`            	    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `technical_record_id` 	BIGINT UNSIGNED NOT NULL,
+    `createdByName`			VARCHAR(250),
+    `certificateType`     	VARCHAR(50),
+    `generatedTimestamp`    DATETIME,
+    `certificateId`			VARCHAR(50),
+    
+    PRIMARY KEY (`id`),
+    
+    CONSTRAINT  `fk_adr_PassCertificateDetails_technical_record_id`
+        FOREIGN KEY (`technical_record_id`)                 
+        REFERENCES  `technical_record`(`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    
+    INDEX `idx_adr_PassCertificateDetails_technical_record_id` (`technical_record_id` ASC)
+)
+    ENGINE = InnoDB;
+    
