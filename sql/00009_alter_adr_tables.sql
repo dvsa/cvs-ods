@@ -17,6 +17,7 @@ ALTER TABLE `adr_details`
     MODIFY COLUMN   `tankTypeAppNo`             VARCHAR(65),
     MODIFY COLUMN   `yearOfManufacture`         SMALLINT,
     MODIFY COLUMN   `substancesPermitted`       VARCHAR(250),
+    MODIFY COLUMN   `productListRefNo`          VARCHAR(1500),
 
     ADD COLUMN      `m145Statement`             BOOLEAN,
 
