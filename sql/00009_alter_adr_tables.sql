@@ -20,6 +20,9 @@ ALTER TABLE `adr_details`
     MODIFY COLUMN   `productListRefNo`          VARCHAR(1500),
 
     ADD COLUMN      `m145Statement`             BOOLEAN,
+    ADD COLUMN      `fingerprint`               VARCHAR(32) 
+        GENERATED ALWAYS AS (md5(technical_record_id)) STORED 
+        UNIQUE KEY NOT NULL,
 
     DROP COLUMN     `memosApply`,
     DROP COLUMN     `additionalExaminerNotes`,
