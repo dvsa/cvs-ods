@@ -1,0 +1,10 @@
+{
+  "name": "cvs-nop",
+  "description": "",
+  "team": "",
+  "documentation": "",
+  "language": "null",
+  "terraform": false,
+  "monorepo": false,
+  "dynamo_tables": []
+}
