@@ -328,7 +328,7 @@ CREATE TABLE IF NOT EXISTS `plate`
 (
     `id`                  BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `technical_record_id` BIGINT UNSIGNED NOT NULL,
-    `plateSerialNumber`   VARCHAR(12),
+    `plateSerialNumber`   VARCHAR(50),
     `plateIssueDate`      DATE,
     `plateReasonForIssue` VARCHAR(16),
     `plateIssuer`         VARCHAR(150),
