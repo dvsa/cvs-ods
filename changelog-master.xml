@@ -13,6 +13,8 @@
     <include  file="sql/00006_alter_technical_record_table.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00007_create_interim_fix_evl_tables.sql" relativeToChangelogFile="true"/>
     <include  file="sql/00008_alter_make_model_table.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00009_alter_plateSerialNumber_field.sql" relativeToChangelogFile="true"/>
+    <include  file="sql/00010_fix_auth_into_service_column_names.sql" relativeToChangelogFile="true"/>
     <include  file="sql/10000_views.sql" relativeToChangelogFile="true"/>
     <include  file="sql/10001_tfl_views.sql" relativeToChangelogFile="true"/>
     <include  file="sql/20000_evl_temporary_tweak_sp.sql" relativeToChangelogFile="true"/>
