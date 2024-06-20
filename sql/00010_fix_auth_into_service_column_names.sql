@@ -3,5 +3,5 @@
 
 ALTER TABLE auth_into_service CHANGE dateReceived dateReceived_old DATETIME;
 ALTER TABLE auth_into_service CHANGE dateAuthorised dateAuthorised_old DATETIME;
-ALTER TABLE auth_into_service CHANGE dateReceived_old dateAuthorised DATETIME;
-ALTER TABLE auth_into_service CHANGE dateAuthorised_old dateReceived DATETIME;
+ALTER TABLE auth_into_service CHANGE dateReceived_old dateAuthorised DATETIME DEFAULT NULL;
+ALTER TABLE auth_into_service CHANGE dateAuthorised_old dateReceived DATETIME DEFAULT NULL;
