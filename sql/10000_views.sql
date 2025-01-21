@@ -53,3 +53,53 @@ CREATE OR REPLACE VIEW evl_view AS
     ORDER BY
         vrm_trm
 ;
+
+CREATE OR REPLACE VIEW vw_active_vehicles AS
+
+WITH test_results_since_cvs AS (
+	SELECT
+		DISTINCT v.system_number
+	FROM
+		test_result tr
+	JOIN
+		vehicle v
+		ON tr.vehicle_id = v.id
+	WHERE
+		testTypeStartTimestamp BETWEEN '2023-03-01' AND DATE_ADD(NOW(), INTERVAL 1 DAY)
+),
+
+tech_record_created_since_cvs AS (
+	SELECT
+		DISTINCT v.system_number
+	FROM
+		technical_record tech
+	JOIN
+		vehicle v
+		ON tech.vehicle_id = v.id
+	WHERE
+		tech.statusCode IN ('current', 'provisional') AND
+		tech.createdAt BETWEEN '2023-03-01' AND DATE_ADD(NOW(), INTERVAL 1 DAY)
+	GROUP BY
+		v.system_number
+    HAVING
+		MIN(tech.createdAt BETWEEN '2023-03-01' AND DATE_ADD(NOW(), INTERVAL 1 DAY))
+),
+
+final_dataset AS (
+	SELECT
+	  system_number
+	, 'test-result' origin
+	FROM
+	  test_results_since_cvs
+	UNION
+	SELECT
+	  system_number
+	, 'tech-record' origin
+	FROM
+	  tech_record_created_since_cvs
+)
+
+SELECT
+	*
+FROM
+	final_dataset
