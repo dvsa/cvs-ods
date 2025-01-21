@@ -56,6 +56,7 @@ CREATE OR REPLACE VIEW evl_view AS
 
 CREATE OR REPLACE VIEW vw_active_vehicles AS
 
+-- Getting list of distinct system numbers of vehicles that have been tested since CVS introduction
 WITH test_results_since_cvs AS (
 	SELECT
 		DISTINCT v.system_number
@@ -68,6 +69,7 @@ WITH test_results_since_cvs AS (
 		testTypeStartTimestamp BETWEEN '2023-03-01' AND DATE_ADD(NOW(), INTERVAL 1 DAY)
 ),
 
+-- Getting list of distinct system numbers from tec since CVS introduction
 tech_record_created_since_cvs AS (
 	SELECT
 		DISTINCT v.system_number
@@ -79,12 +81,9 @@ tech_record_created_since_cvs AS (
 	WHERE
 		tech.statusCode IN ('current', 'provisional') AND
 		tech.createdAt BETWEEN '2023-03-01' AND DATE_ADD(NOW(), INTERVAL 1 DAY)
-	GROUP BY
-		v.system_number
-    HAVING
-		MIN(tech.createdAt BETWEEN '2023-03-01' AND DATE_ADD(NOW(), INTERVAL 1 DAY))
 ),
 
+-- Union together with an origin for lineage
 final_dataset AS (
 	SELECT
 	  system_number
