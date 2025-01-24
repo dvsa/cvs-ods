@@ -109,7 +109,7 @@ CREATE OR REPLACE VIEW vw_dvla_ants AS
 -- Get the test IDs of the specific tests we're interested in
 WITH na_test_type_id AS (
 	SELECT	id
-	FROM 	CVSNOP.test_type
+	FROM 	test_type
 	WHERE 	testTypeName LIKE '%notifiable alteration%'
     AND		(testTypeName LIKE '%VTG10%' OR testTypeName LIKE '%VTG790%')
 ),
@@ -120,7 +120,7 @@ ranked_tests AS
 	SELECT	vehicle_id,
 			createdAt,
 			RANK() OVER(partition by vehicle_id order by createdAt desc) sort_order
-	FROM	CVSNOP.test_result
+	FROM	test_result
 	WHERE	test_type_id IN (SELECT id FROM na_test_type_id)
     AND		testResult = 'pass'
 ),
