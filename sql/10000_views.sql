@@ -106,6 +106,7 @@ FROM
 
 CREATE OR REPLACE VIEW vw_dvla_ants AS
 
+-- Get the test IDs of the specific tests we're interested in
 WITH na_test_type_id AS (
 	SELECT	id
 	FROM 	CVSNOP.test_type
@@ -113,6 +114,7 @@ WITH na_test_type_id AS (
     AND		(testTypeName LIKE '%VTG10%' OR testTypeName LIKE '%VTG790%')
 ),
 
+-- Get the test results for these test types, also add a rank to them in the event there are multiple
 ranked_tests AS
 (
 	SELECT	vehicle_id,
@@ -123,81 +125,119 @@ ranked_tests AS
     AND		testResult = 'pass'
 ),
 
+-- Getting the most recent test
 most_recent_test AS (
 	SELECT	*
 	FROM 	ranked_tests
 	WHERE	sort_order = 1
 ),
 
+-- identifying the history of the vehicle before the test occured
 tech_records_before_test AS (
 	SELECT	tech.id,
 			tech.vehicle_id,
 			tech.createdAt,
             tech.grossGbWeight,
             tech.trainGbWeight,
+			RANK() OVER(PARTITION BY vehicle_id ORDER BY tech.createdAt DESC) tech_sort_order_before_test
+	FROM	technical_record AS tech
+	JOIN 	most_recent_test AS mrt
+	ON		tech.vehicle_id = mrt.vehicle_id
+	WHERE	tech.statusCode = 'archived'
+	AND		tech.createdAt < mrt.createdAt
+),
+
+-- identifying the history of the vehicle after the test occured
+tech_records_after_test AS (
+	SELECT	tech.id,
+			tech.vehicle_id,
+			tech.createdAt,
+            tech.grossGbWeight,
+            tech.trainGbWeight,
             vc.vehicleConfiguration,
+            mm.make,
+            mm.model,
+            CASE
+				WHEN vc.vehicleConfiguration IS NOT NULL
+                AND noOfAxles IS NOT NULL
+                THEN CONCAT(SUBSTRING(vc.vehicleConfiguration,1,1), tech.noOfAxles)
+                ELSE NULL
+			END AS wheelplan,
 			RANK() OVER(PARTITION BY vehicle_id ORDER BY tech.createdAt DESC) tech_sort_order_before_test
 	FROM	technical_record AS tech
 	JOIN	vehicle_class AS vc
 	ON 		tech.vehicle_class_id = vc.id
 	JOIN 	most_recent_test AS mrt
 	ON		tech.vehicle_id = mrt.vehicle_id
+    JOIN	make_model AS mm
+    ON		tech.make_model_id = mm.id
 	WHERE	tech.statusCode in ('current','archived')
-	AND		tech.createdAt < mrt.createdAt
+	AND		tech.createdAt > mrt.createdAt
 ),
 
+-- Join the tech record either side of the test
 vehicle_timeline AS (
 	SELECT	mrt.vehicle_id,
 			mrt.createdAt 							AS test_result_createdAt,
-
-            init.id 								AS initial_tech_record_id,
-            init.createdAt 							AS initial_tech_record_createdAt,
-			COALESCE(init.grossGbWeight,0)			AS initial_grossGbWeight,
-            COALESCE(init.trainGbWeight,0)			AS initial_trainGbWeight,
 
             prov.id 								AS provisional_tech_record_id,
 			prov.createdAt 							AS provisional_tech_record_createdAt,
 			COALESCE(prov.grossGbWeight,0)			AS provisional_grossGbWeight,
             COALESCE(prov.trainGbWeight,0)			AS provisional_trainGbWeight,
-			prov.vehicleConfiguration				AS provisional_vehicleConfiguration
+			aft.id 									AS tested_tech_record_id,
+			aft.createdAt 							AS tested_tech_record_createdAt,
+			COALESCE(aft.grossGbWeight,0)			AS tested_grossGbWeight,
+            COALESCE(aft.trainGbWeight,0)			AS tested_trainGbWeight,
+            aft.make								AS tested_make,
+            aft.model								AS tested_model,
+			aft.vehicleConfiguration				AS tested_vehicleConfiguration,
+            aft.wheelplan							AS tested_wheelplan
 	FROM	most_recent_test mrt
-	JOIN	tech_records_before_test init 			ON mrt.vehicle_id = init.vehicle_id
-													AND init.tech_sort_order_before_test = 2
-	JOIN	tech_records_before_test prov 			ON mrt.vehicle_id = prov.vehicle_id
-													AND prov.tech_sort_order_before_test = 1
+	JOIN	tech_records_before_test 				AS prov
+			ON mrt.vehicle_id = prov.vehicle_id
+			AND prov.tech_sort_order_before_test = 1
+	JOIN	tech_records_after_test 				AS aft
+			ON mrt.vehicle_id = aft.vehicle_id
+			AND aft.tech_sort_order_before_test = 1
 ),
 
+-- Only include records where the weight is different between the tech records
 final_dataset AS(
 	SELECT 	v.vrm_trm,
-			NULL AS make,
-			NULL AS model,
-			NULL as wheelplan,
+			tested_make 					AS make,
+			tested_model 					AS model,
+			UPPER(tested_wheelplan) 		AS wheelplan,
 			CASE
-				WHEN provisional_vehicleConfiguration = 'rigid' THEN initial_grossGbWeight
-				WHEN provisional_vehicleConfiguration = 'articulated' THEN initial_trainGbWeight
-			END AS gross_weight_before_test,
+				WHEN tested_vehicleConfiguration = 'rigid'
+					THEN provisional_grossGbWeight
+				WHEN tested_vehicleConfiguration = 'articulated'
+					THEN provisional_trainGbWeight
+			END 							AS gross_weight_before_test,
 			CASE
-				WHEN provisional_vehicleConfiguration = 'rigid' THEN provisional_grossGbWeight
-				WHEN provisional_vehicleConfiguration = 'articulated' THEN provisional_trainGbWeight
-			END AS gross_weight_after_test,
-			'1111' AS DOE_reference,
-			NULL AS date_of_plating,
-			provisional_tech_record_createdAt AS tech_record_creation_date
+				WHEN tested_vehicleConfiguration = 'rigid'
+					THEN tested_grossGbWeight
+				WHEN tested_vehicleConfiguration = 'articulated'
+					THEN tested_trainGbWeight
+			END 							AS gross_weight_after_test,
+			'1111' 							AS DOE_reference,
+			NULL 							AS date_of_plating,
+            provisional_tech_record_createdAt,
+            test_result_createdAt,
+			tested_tech_record_createdAt
 	FROM 	vehicle_timeline vt
 	JOIN	vehicle v on vt.vehicle_id = v.id
-
 	WHERE
 			CASE
-				WHEN provisional_vehicleConfiguration = 'rigid'
-						AND initial_grossGbWeight <> provisional_grossGbWeight
-						THEN TRUE
-				WHEN provisional_vehicleConfiguration = 'articulated'
-						AND initial_trainGbWeight <> provisional_trainGbWeight
-						THEN TRUE
+				WHEN tested_vehicleConfiguration = 'rigid'
+				AND provisional_grossGbWeight <> tested_grossGbWeight
+					THEN TRUE
+				WHEN tested_vehicleConfiguration = 'articulated'
+				AND provisional_trainGbWeight <> tested_trainGbWeight
+					THEN TRUE
 				ELSE FALSE
 			END = TRUE
-	order by test_result_createdAt desc
 )
 
-SELECT *
-FROM final_dataset;
+SELECT 		*
+FROM 		final_dataset
+ORDER BY 	tested_tech_record_createdAt DESC
