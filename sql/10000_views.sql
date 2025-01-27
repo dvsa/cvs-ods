@@ -111,7 +111,8 @@ WITH na_test_type_id AS (
 	SELECT	id
 	FROM 	test_type
 	WHERE 	testTypeName LIKE '%notifiable alteration%'
-    AND		(testTypeName LIKE '%VTG10%' OR testTypeName LIKE '%VTG790%')
+	OR      testTypeName LIKE '%VTG10%'
+	OR      testTypeName LIKE '%VTG790%'
 ),
 
 -- Get the test results for these test types, also add a rank to them in the event there are multiple
@@ -122,7 +123,7 @@ ranked_tests AS
 			RANK() OVER(partition by vehicle_id order by createdAt desc) sort_order
 	FROM	test_result
 	WHERE	test_type_id IN (SELECT id FROM na_test_type_id)
-    AND		testResult = 'pass'
+    AND		LOWER(testResult) IN ('pass', 'prs')
 ),
 
 -- Getting the most recent test
@@ -163,7 +164,7 @@ tech_records_after_test AS (
                 THEN CONCAT(SUBSTRING(vc.vehicleConfiguration,1,1), tech.noOfAxles)
                 ELSE NULL
 			END AS wheelplan,
-			RANK() OVER(PARTITION BY vehicle_id ORDER BY tech.createdAt DESC) tech_sort_order_before_test
+			RANK() OVER(PARTITION BY vehicle_id ORDER BY tech.createdAt ASC) tech_sort_order_after_test
 	FROM	technical_record AS tech
 	JOIN	vehicle_class AS vc
 	ON 		tech.vehicle_class_id = vc.id
@@ -195,10 +196,10 @@ vehicle_timeline AS (
 	FROM	most_recent_test mrt
 	JOIN	tech_records_before_test 				AS prov
 			ON mrt.vehicle_id = prov.vehicle_id
-			AND prov.tech_sort_order_before_test = 1
+			AND prov.tech_sort_order_before_test = 2 -- tech record before the provisional
 	JOIN	tech_records_after_test 				AS aft
 			ON mrt.vehicle_id = aft.vehicle_id
-			AND aft.tech_sort_order_before_test = 1
+			AND aft.tech_sort_order_after_test = 1 -- tech record after test
 ),
 
 -- Only include records where the weight is different between the tech records
@@ -212,13 +213,13 @@ final_dataset AS(
 					THEN provisional_grossGbWeight
 				WHEN tested_vehicleConfiguration = 'articulated'
 					THEN provisional_trainGbWeight
-			END 							AS gross_weight_before_test,
+			END 							AS weight_before_test,
 			CASE
 				WHEN tested_vehicleConfiguration = 'rigid'
 					THEN tested_grossGbWeight
 				WHEN tested_vehicleConfiguration = 'articulated'
 					THEN tested_trainGbWeight
-			END 							AS gross_weight_after_test,
+			END 							AS weight_after_test,
 			'1111' 							AS DOE_reference,
 			NULL 							AS date_of_plating,
             provisional_tech_record_createdAt,
@@ -240,4 +241,4 @@ final_dataset AS(
 
 SELECT 		*
 FROM 		final_dataset
-ORDER BY 	tested_tech_record_createdAt DESC
+ORDER BY 	tested_tech_record_createdAt ASC
