@@ -239,7 +239,7 @@ final_dataset AS(
 )
 
 SELECT
-			vrm_trm,
+            vrm_trm,
             make,
             model,
             wheelplan,
@@ -247,7 +247,7 @@ SELECT
             weight_before_test,
             weight_after_test,
             DOE_reference,
-			tested_tech_record_createdAt	AS tech_record_date
+            tested_tech_record_createdAt	AS tech_record_date
 
-FROM 		final_dataset
-ORDER BY 	test_result_createdAt ASC
+FROM        final_dataset
+ORDER BY    test_result_createdAt ASC
