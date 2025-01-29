@@ -221,7 +221,6 @@ final_dataset AS(
 					THEN tested_trainGbWeight
 			END 							AS weight_after_test,
 			'1111' 							AS DOE_reference,
-			NULL 							AS date_of_plating,
             provisional_tech_record_createdAt,
             test_result_createdAt,
 			tested_tech_record_createdAt
@@ -239,6 +238,16 @@ final_dataset AS(
 			END = TRUE
 )
 
-SELECT 		*
+SELECT
+			vrm_trm,
+            make,
+            model,
+            wheelplan,
+            test_result_createdAt			AS test_date,
+            weight_before_test,
+            weight_after_test,
+            DOE_reference,
+			tested_tech_record_createdAt	AS tech_record_date
+
 FROM 		final_dataset
-ORDER BY 	tested_tech_record_createdAt ASC
+ORDER BY 	test_result_createdAt ASC
